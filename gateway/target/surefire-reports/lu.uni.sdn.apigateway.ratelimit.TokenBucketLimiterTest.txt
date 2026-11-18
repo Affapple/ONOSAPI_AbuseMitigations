@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: lu.uni.sdn.apigateway.ratelimit.TokenBucketLimiterTest
--------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.02 s - in lu.uni.sdn.apigateway.ratelimit.TokenBucketLimiterTest

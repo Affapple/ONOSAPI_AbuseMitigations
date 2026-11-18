@@ -49,13 +49,15 @@ Why this design:
 | # | Fact | Evidence |
 |---|---|---|
 | V1 | ONOS REST authorization only knows two levels: writes (POST/PUT/DELETE/PATCH) need `admin`, everything else needs `viewer`. Nothing per endpoint or per tenant. | `guest` (viewer): GET `/onos/v1/flows` 200, POST 403. `onos` (admin): both 200. Source: `org.onlab.rest.AuthorizationFilter` |
-| V2 | `AuthorizationFilter` is opt-in: an app gets it only if its `web.xml` registers it | `guest` DELETE on Lab3 `/onos/macextractor/macs` returned 204 (Lab3's `web.xml` doesn't register the filter) |
+| V2 | `AuthorizationFilter` is opt-in: an app gets it if its `web.xml` registers it, **or implicitly** if its JAX-RS application extends `org.onlab.rest.AbstractWebApplication` (whose `getClasses()` always adds it, per the B0 audit's `javap`). The gateway lists its classes in `web.xml` to avoid it | `guest` DELETE on Lab3 `/onos/macextractor/macs` returned 204 (Lab3's `web.xml` doesn't register the filter) |
 | V3 | `POST /onos/v1/flows` accepts `?appId=`, chosen by the caller | `FlowsWebResource.createFlows(@QueryParam("appId") String, InputStream)` in `onos-rest-2.7.0.jar` |
 | V4 | `onos-rest`'s `web.xml` restricts access to roles `admin` and `viewer` | `<auth-constraint>` in `onos-rest-2.7.0.jar!/WEB-INF/web.xml` |
 | V5 | The local build toolchain works | `JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64 mvn -v` → Maven 3.9.12, Java 11.0.33 |
 | V6 | The container starts with stock users only (`karaf`, `onos`, `guest`); Lab2's users are not there | `users.properties` read from the container |
 
-V3 means that in the "no controls" config, a tenant can label its flows with **any** app ID, including another tenant's. Record this as a finding.
+| V7 | `POST /onos/v1/intents` also accepts any caller-chosen appId, and intent-compiled flows carry appId `org.onosproject.net.intent` | A1 audit: an intent submitted under Lab3's appId returned 201; its 6 compiled flows had `appId=org.onosproject.net.intent` |
+
+V3 and V7 mean that in the "no controls" config, a tenant can label its flows with **any** app ID, including another tenant's. Record this as a finding.
 
 ## 3. Open checks (step 0). Each must pass before we build on it.
 

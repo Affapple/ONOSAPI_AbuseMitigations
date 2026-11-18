@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tenant API gateway web application.
+
+  * Accepts the Karaf roles tenant, viewer and admin. Karaf only authenticates;
+    every authorization decision is made by GatewayFilter.
+  * org.onlab.rest.AuthorizationFilter is deliberately NOT registered: it would
+    require "viewer" for every request and "admin" for every write, which rejects
+    tenant accounts outright. Note that org.onlab.rest.AbstractWebApplication adds
+    AuthorizationFilter implicitly, which is why the classes are listed here instead
+    of using a javax.ws.rs.Application subclass.
+  * GatewayFilter is @PreMatching and default-deny, so OPTIONS/HEAD and unknown
+    paths are rejected before Jersey's automatic OPTIONS/HEAD handling.
+  * GatewayExceptionMapper turns every exception into a JSON error with a reason code.
+  -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="ONOS" version="2.5">
+    <display-name>Tenant API Gateway</display-name>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Secured</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>tenant</role-name>
+            <role-name>viewer</role-name>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-role>
+        <role-name>tenant</role-name>
+    </security-role>
+    <security-role>
+        <role-name>viewer</role-name>
+    </security-role>
+    <security-role>
+        <role-name>admin</role-name>
+    </security-role>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>karaf</realm-name>
+    </login-config>
+
+    <servlet>
+        <servlet-name>JAX-RS Service</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>
+                lu.uni.sdn.apigateway.rest.GatewayFilter,
+                lu.uni.sdn.apigateway.rest.GatewayResponseFilter,
+                lu.uni.sdn.apigateway.rest.GatewayExceptionMapper,
+                lu.uni.sdn.apigateway.rest.WhoAmIResource,
+                lu.uni.sdn.apigateway.rest.FlowsResource,
+                lu.uni.sdn.apigateway.rest.IntentsResource,
+                lu.uni.sdn.apigateway.rest.ProxyResource,
+                lu.uni.sdn.apigateway.rest.AdminResource,
+                org.onlab.rest.JsonBodyWriter
+            </param-value>
+        </init-param>
+        <!-- No auto-generated application.wadl (it would describe the API to anyone). -->
+        <init-param>
+            <param-name>jersey.config.server.wadl.disableWadl</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JAX-RS Service</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+</web-app>

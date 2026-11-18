@@ -74,6 +74,8 @@ Each scenario is a parameterized script (target URL, credentials, rate, duration
 | **S4** | Intent-based cross-tenant interference | t1 installs intents or flows that capture or redirect t2 traffic: matching t2's destination at higher priority, spoofing t2's MAC/IP as source, intents ending at t2 hosts | No controls: interference works. ACL only: works for anything not caught by the plain ownership check. Mitigation: conflict/spoofing detection rejects |
 | **L** | Legitimate workload (always running) | t2-op does a steady, low-rate mix: install/remove a host intent, read flows and hosts; plus iperf h2a→h2b | Reference for "legitimate tenant throughput" and latency |
 
+**Legitimate payloads must satisfy B4** (B4 audit): priority 100–30000, `isPermanent:false`, timeout ≤ 300, an owned source (owned edge IN_PORT on that device, owned ETH_SRC, or IPV4_SRC inside an owned subnet) in every flow match, `ETH_TYPE` together with any IPv4 field, and no intent `constraints`. Otherwise C3 rejects L for reasons unrelated to abuse.
+
 Each scenario also has a **pass criterion** for the mitigated config, written before the run (e.g. "S1: L's p95 HTTP latency within 20% of the no-attack baseline").
 
 ## A5. Measurement harness (`harness/`)

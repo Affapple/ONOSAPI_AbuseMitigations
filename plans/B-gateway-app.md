@@ -58,7 +58,8 @@ Gateway roles are assigned per account in `tenants.json`. Karaf only knows the r
 |---|---|---|---|
 | GET `/gw/flows`, `/gw/intents` (own tenant only) | ✓ | ✓ | ✓ all tenants |
 | POST/DELETE `/gw/flows`, `/gw/intents` | ✗ | ✓ own resources | ✓ |
-| GET `/gw/v1/{devices,links,topology,hosts}` | ✓ | ✓ | ✓ |
+| GET `/gw/v1/{devices,links,topology}` | ✓ | ✓ | ✓ |
+| GET `/gw/v1/hosts[/{id}]` | ✓ own tenant's hosts only | ✓ own only | ✓ all |
 | GET `/gw/v1/{anything else}` | ✗ | ✗ | ✓ |
 | Writes to `/gw/v1/*` | ✗ | ✗ | ✓ |
 | `/gw/admin/*` | ✗ | ✗ | ✓ |
@@ -90,7 +91,7 @@ Reads of flows and intents are filtered to the caller's own `ApplicationId`, so 
 
 | Quota | Default | How it's counted |
 |---|---|---|
-| `maxFlowsPerTenant` | 100 | `FlowRuleService.getFlowEntriesById(tenantAppId)` |
+| `maxFlowsPerTenant` | 100 | `FlowRuleService.getFlowEntriesById(tenantAppId)` for direct flows **plus** the flows compiled from the tenant's intents. Track A observed (A1) that intent-compiled flows carry appId `org.onosproject.net.intent`, not the submitter's, so they must be attributed through the tenant's intents (e.g. `IntentService.getInstallableIntents(key)` → FlowRuleIntent rules), never by flow appId |
 | `maxFlowsPerTenantPerDevice` | 40 | Same count, grouped by device |
 | `maxIntentsPerTenant` | 20 | `IntentService.getIntentsByAppId(tenantAppId)` |
 | `churnLimit` | 200 add+delete per 60 s window | Sliding-window counter of write operations |
@@ -109,6 +110,7 @@ A request that would exceed a quota is rejected whole (409/429 with the reason).
    - drop-all is only allowed when the match is limited to tenant-owned traffic;
    - output ports must be owned edge ports or trunk links, never another tenant's edge port; `CONTROLLER` output is rejected (it would generate packet-ins);
    - intents: only `HostToHostIntent` and `PointToPointIntent`, with endpoints owned by the tenant.
+   - **intent selectors and treatments get the same rules as flows** (A3 audit, "transit capture"). A `PointToPointIntent` with an empty or broad selector between two owned edge ports compiles to `IN_PORT`-only rules on the shared transit switches (s1, and the far edge switch's trunk port). Those rules capture **every** tenant's traffic that comes in on that trunk. So a P2P selector must contain an owned `ETH_SRC` or an `IPV4_SRC` inside an owned subnet, and its treatment must not rewrite addresses to foreign ones. `HostToHostIntent` is safe as it is: it compiles to `IN_PORT+ETH_SRC+ETH_DST` with owned MACs.
 
 **Test:** each S3 variant gets 400 with a specific reason code; L's normal flows pass.
 
@@ -118,6 +120,7 @@ A request that would exceed a quota is rejected whole (409/429 with the reason).
 - **Cross-tenant overlap:** for each existing rule of another tenant on the same device, test whether the two matches can both match the same packet (compare criteria field by field; IP prefixes overlap when one contains the other). An overlap where the new rule has priority ≥ the existing one is rejected, because it would take over the other tenant's traffic. Overlap at a lower priority is allowed.
 - **Destination capture:** a match on `ETH_DST`/`IPV4_DST` belonging to another tenant is rejected unless the actions only forward toward that destination. Simplest rule to start with: reject it.
 - **Intents:** reject any intent whose endpoint is attached to another tenant's edge port.
+- **Compiled-flow check (detective, defence in depth):** after an intent reaches `INSTALLED`, look at the compiled flows (`IntentService.getInstallableIntents(key)` → FlowRuleIntent rules). If any of them, on any device, overlaps another tenant's rules or traffic as defined above, withdraw the intent, count a conflict violation (B6), and record it in the audit log. This catches compilations the selector check didn't anticipate.
 
 **Test:** each S4 variant gets a 409 conflict; t2's traffic (iperf h2a→h2b) is unaffected.
 

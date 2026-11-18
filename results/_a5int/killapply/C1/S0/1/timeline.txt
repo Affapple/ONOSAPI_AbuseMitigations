@@ -1,0 +1,11 @@
+config=C1
+scenario=S0
+rep=1
+target=v1
+duration=120
+cmd_L=python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 120 --out /home/mininet/project/results/_a5int/killapply/C1/S0/1/L.csv
+cmd_S0=sleep 60
+ts_lock=1795022115.890
+ts_collectors_stop=1795022122.385
+invalid=;config.sh failed
+ts_end=1795022179.750

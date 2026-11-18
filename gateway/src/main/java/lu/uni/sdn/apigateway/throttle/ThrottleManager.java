@@ -1,5 +1,6 @@
 package lu.uni.sdn.apigateway.throttle;
 
+import lu.uni.sdn.apigateway.acl.Reasons;
 import com.google.common.collect.ImmutableList;
 import lombok.Value;
 
@@ -33,7 +34,9 @@ import java.util.function.LongSupplier;
  * <p><b>Fixed mode</b> (Lab2 comparison): no levels, no escalation; any violation (weight
  * &gt; 0) starts (or extends) a fixed penalty of fixedPenaltySeconds. Effect "rate" (default,
  * closest to Lab2's fixed 60 s rate cap): the tenant's B2 refill rate x fixedRateFactor on
- * all requests. Effect "block-writes": writes 429 throttled_fixed, reads untouched.</p>
+ * all requests, and its current tokens are scaled by the same factor when the penalty
+ * starts, so the cap is immediate (needs rateLimitEnabled=true). Effect "block-writes":
+ * writes 429 throttled_fixed, reads untouched.</p>
  */
 public final class ThrottleManager {
 
@@ -106,74 +109,32 @@ public final class ThrottleManager {
     }
 
     /**
-     * Weight of a rejection reason code; 0 for reasons that are not violations
-     * (including this module's own throttled_* answers).
+     * Weight of a rejection reason code, by its category (see {@link Reasons#category});
+     * 0 for reasons that are not violations, including this module's own throttled_*
+     * answers. A {@code bad_request} (body does not parse or decode) on a write to
+     * /gw/flows or /gw/intents counts as a validation violation, so fuzzing the decoders
+     * escalates; elsewhere it, and {@code not_found} (e.g. the async store lag a
+     * legitimate workload hits), stay free.
      *
-     * @param reason reason code
-     * @param s      settings
-     * @return weight
-     */
-    public static double weightFor(String reason, ThrottleSettings s) {
-        return weightFor(reason, false, s);
-    }
-
-    /**
-     * Weight of a rejection reason code. A {@code bad_request} (body does not parse or
-     * decode) on a write to /gw/flows or /gw/intents counts as a validation violation, so
-     * fuzzing the decoders escalates; elsewhere it, and {@code not_found} (e.g. the async
-     * store lag a legitimate workload hits), stay free.
-     *
-     * @param reason          reason code
+     * @param reason            reason code
      * @param formatOnFlowWrite the request was a POST/DELETE to /gw/flows or /gw/intents
-     * @param s               settings
+     * @param s                 settings
      * @return weight
      */
     public static double weightFor(String reason, boolean formatOnFlowWrite, ThrottleSettings s) {
-        if (reason == null) {
-            return 0;
-        }
-        if (formatOnFlowWrite && "bad_request".equals(reason)) {
+        if (formatOnFlowWrite && Reasons.BAD_REQUEST.equals(reason)) {
             return s.getWeightValidation();
         }
-        switch (reason) {
-            case "rate_limited":
-            case "body_too_large":
-            case "batch_too_large":
-            case "batch_mismatch":
+        switch (Reasons.category(reason)) {
+            case RATELIMIT:
                 return s.getWeightRateLimit();
-            case "quota_flows":
-            case "quota_flows_device":
-            case "quota_intents":
-            case "quota_churn":
+            case QUOTA:
                 return s.getWeightQuota();
-            case "bad_priority":
-            case "permanent_not_allowed":
-            case "bad_timeout":
-            case "criterion_not_allowed":
-            case "missing_prerequisite":
-            case "controller_output":
-            case "match_not_owned":
-            case "drop_not_owned":
-            case "selector_not_owned":
-            case "rewrite_not_owned":
-            case "constraints_not_allowed":
+            case VALIDATION:
                 return s.getWeightValidation();
-            case "spoofed_source":
-            case "foreign_rewrite":
-            case "dst_capture":
-            case "overlap_conflict":
-            case "compiled_conflict":
+            case CONFLICT:
                 return s.getWeightConflict();
-            case "acl_denied":
-            case "bad_path":
-            case "device_not_owned":
-            case "port_not_owned":
-            case "resource_not_owned":
-            case "instruction_not_allowed":
-            case "endpoint_not_owned":
-            case "not_owner":
-            case "tenant_mismatch":
-            case "unsupported_intent_type":
+            case ACL:
                 return s.getWeightAcl();
             default:
                 return 0;
@@ -187,17 +148,21 @@ public final class ThrottleManager {
      * @param reason reason code
      * @param weight weight (&lt;= 0 is ignored)
      * @param s      settings
+     * @return true if this violation STARTED a fixed-mode penalty (the caller then caps
+     *         the tenant's current B2 tokens too)
      */
-    public void record(String tenant, String reason, double weight, ThrottleSettings s) {
+    public boolean record(String tenant, String reason, double weight, ThrottleSettings s) {
         if (weight <= 0) {
-            return;
+            return false;
         }
         long now = nanoClock.getAsLong();
         State st = states.computeIfAbsent(tenant, k -> new State(now));
+        boolean started = false;
         synchronized (st) {
             update(st, now, s);
             st.score += weight;
             if (s.isFixed()) {
+                started = now >= st.fixedUntil;
                 st.fixedUntil = Math.max(st.fixedUntil, now + seconds(s.getFixedPenaltySeconds()));
             } else {
                 update(st, now, s);
@@ -207,6 +172,7 @@ public final class ThrottleManager {
                 st.history.removeFirst();
             }
         }
+        return started;
     }
 
     /**

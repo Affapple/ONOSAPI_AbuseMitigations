@@ -1,0 +1,1 @@
+{"apps": {"lu.uni.sdn.api_gateway": "ACTIVE", "lu.uni.sdn.southbound_mac_extractor": "INSTALLED", "org.onosproject.fwd": "INSTALLED", "org.onosproject.proxyarp": "INSTALLED"}, "containerStartedAt": "2026-11-18T15:41:39.258985141Z", "gateway": {"oarMd5": "c717a01e4b6610697c8e684936625454", "state": "ACTIVE", "version": "1.0.SNAPSHOT"}}

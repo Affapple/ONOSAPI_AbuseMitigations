@@ -1,0 +1,154 @@
+# Evaluation summary
+
+From `/home/jgaspar/Downloads/SDN/Project/results/_a5test`, valid runs only; CPU in % of one core, memory in MiB, latency of 2xx responses in ms.
+
+## resources
+
+| config | workload | runs | skipped | cpu_mean | cpu_attack_mean | cpu_peak | mem_peak_mib | heap_peak_mib | flows_peak | device_flows_peak | core_peak | intent_peak | tenant_peak | other_peak |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| C1 | S0 | 1 | 0 | 8.5 | 7.6 | 30.5 | 593.2 | 203.2 | 21 | 7 | 9 | 12 | 0 | 0 |
+| C2 | S0 | 1 | 0 | 9.7 | 9.0 | 48.2 | 648.6 | 196.9 | 21 | 7 | 9 | 12 | 0 | 0 |
+| C3 | S0 | 2 | 0 | 10.2 | 9.2 | 46.6 | 596.4 | 191.8 | 21 | 7 | 9 | 12 | 0 | 0 |
+| C2 | baseline | 1 | 0 | 12.2 | 11.2 | 53.4 | 577.6 | 183.6 | 21 | 7 | 9 | 12 | 0 | 0 |
+
+## latency
+
+| config | workload | csv | op | window | requests | success | p50_ms | p95_ms | p99_ms | rejections |
+|---|---|---|---|---|---|---|---|---|---|---|
+| C1 | S0 | L | all | pre | 75 | 1.0 | 14.5 | 27.9 | 45.1 |  |
+| C1 | S0 | L | all | attack | 144 | 1.0 | 6.7 | 19.6 | 38.3 |  |
+| C1 | S0 | L | all | post | 71 | 1.0 | 8.8 | 21.6 | 31.1 |  |
+| C2 | S0 | L | all | pre | 75 | 1.0 | 10.8 | 45.0 | 55.4 |  |
+| C2 | S0 | L | all | attack | 143 | 1.0 | 8.5 | 24.8 | 37.0 |  |
+| C2 | S0 | L | all | post | 72 | 1.0 | 10.8 | 22.3 | 27.7 |  |
+| C3 | S0 | L | all | pre | 150 | 1.0 | 11.2 | 43.9 | 64.8 |  |
+| C3 | S0 | L | all | attack | 288 | 1.0 | 10.2 | 27.2 | 34.1 |  |
+| C3 | S0 | L | all | post | 144 | 1.0 | 11.4 | 26.2 | 36.1 |  |
+| C1 | S0 | L | delete_intent | pre | 2 | 1.0 | 49.8 | 69.6 | 71.4 |  |
+| C1 | S0 | L | delete_intent | attack | 4 | 1.0 | 38.2 | 46.7 | 47.7 |  |
+| C1 | S0 | L | delete_intent | post | 2 | 1.0 | 24.9 | 29.4 | 29.8 |  |
+| C2 | S0 | L | delete_intent | pre | 2 | 1.0 | 42.5 | 58.3 | 59.7 |  |
+| C2 | S0 | L | delete_intent | attack | 4 | 1.0 | 28.1 | 59.3 | 63.6 |  |
+| C2 | S0 | L | delete_intent | post | 2 | 1.0 | 29.5 | 33.2 | 33.5 |  |
+| C3 | S0 | L | delete_intent | pre | 4 | 1.0 | 38.9 | 63.1 | 64.8 |  |
+| C3 | S0 | L | delete_intent | attack | 8 | 1.0 | 24.5 | 29.8 | 30.3 |  |
+| C3 | S0 | L | delete_intent | post | 4 | 1.0 | 35.9 | 55.3 | 57.8 |  |
+| C1 | S0 | L | get_flows | pre | 20 | 1.0 | 12.5 | 17.7 | 19.3 |  |
+| C1 | S0 | L | get_flows | attack | 40 | 1.0 | 5.8 | 13.5 | 15.0 |  |
+| C1 | S0 | L | get_flows | post | 20 | 1.0 | 4.7 | 13.2 | 18.2 |  |
+| C2 | S0 | L | get_flows | pre | 20 | 1.0 | 7.7 | 25.5 | 40.1 |  |
+| C2 | S0 | L | get_flows | attack | 40 | 1.0 | 5.3 | 19.0 | 19.7 |  |
+| C2 | S0 | L | get_flows | post | 20 | 1.0 | 7.5 | 14.7 | 18.2 |  |
+| C3 | S0 | L | get_flows | pre | 40 | 1.0 | 6.5 | 22.2 | 36.9 |  |
+| C3 | S0 | L | get_flows | attack | 80 | 1.0 | 8.4 | 18.9 | 21.0 |  |
+| C3 | S0 | L | get_flows | post | 40 | 1.0 | 11.4 | 19.8 | 22.9 |  |
+| C1 | S0 | L | get_hosts | pre | 20 | 1.0 | 19.4 | 28.8 | 34.3 |  |
+| C1 | S0 | L | get_hosts | attack | 40 | 1.0 | 8.6 | 20.3 | 25.5 |  |
+| C1 | S0 | L | get_hosts | post | 20 | 1.0 | 11.9 | 21.1 | 22.0 |  |
+| C2 | S0 | L | get_hosts | pre | 20 | 1.0 | 15.8 | 49.2 | 52.8 |  |
+| C2 | S0 | L | get_hosts | attack | 40 | 1.0 | 12.9 | 25.7 | 32.1 |  |
+| C2 | S0 | L | get_hosts | post | 20 | 1.0 | 11.7 | 22.6 | 23.9 |  |
+| C3 | S0 | L | get_hosts | pre | 40 | 1.0 | 14.8 | 33.8 | 67.6 |  |
+| C3 | S0 | L | get_hosts | attack | 80 | 1.0 | 15.8 | 31.7 | 34.7 |  |
+| C3 | S0 | L | get_hosts | post | 40 | 1.0 | 16.1 | 26.6 | 30.6 |  |
+| C1 | S0 | L | get_intents | pre | 20 | 1.0 | 14.8 | 21.0 | 23.6 |  |
+| C1 | S0 | L | get_intents | attack | 40 | 1.0 | 5.4 | 13.9 | 15.2 |  |
+| C1 | S0 | L | get_intents | post | 20 | 1.0 | 11.4 | 18.8 | 26.9 |  |
+| C2 | S0 | L | get_intents | pre | 20 | 1.0 | 5.2 | 16.2 | 17.2 |  |
+| C2 | S0 | L | get_intents | attack | 40 | 1.0 | 6.2 | 17.8 | 19.9 |  |
+| C2 | S0 | L | get_intents | post | 20 | 1.0 | 11.6 | 18.9 | 20.0 |  |
+| C3 | S0 | L | get_intents | pre | 40 | 1.0 | 8.3 | 26.0 | 30.7 |  |
+| C3 | S0 | L | get_intents | attack | 80 | 1.0 | 7.2 | 23.3 | 35.1 |  |
+| C3 | S0 | L | get_intents | post | 40 | 1.0 | 11.6 | 19.1 | 21.5 |  |
+| C1 | S0 | L | poll | pre | 10 | 1.0 | 14.5 | 21.5 | 22.6 |  |
+| C1 | S0 | L | poll | attack | 16 | 1.0 | 5.8 | 12.3 | 18.2 |  |
+| C1 | S0 | L | poll | post | 7 | 1.0 | 8.9 | 27.1 | 32.5 |  |
+| C2 | S0 | L | poll | pre | 10 | 1.0 | 14.5 | 27.3 | 30.2 |  |
+| C2 | S0 | L | poll | attack | 15 | 1.0 | 8.2 | 20.2 | 24.0 |  |
+| C2 | S0 | L | poll | post | 8 | 1.0 | 5.7 | 10.4 | 10.7 |  |
+| C3 | S0 | L | poll | pre | 20 | 1.0 | 9.4 | 30.7 | 38.9 |  |
+| C3 | S0 | L | poll | attack | 32 | 1.0 | 7.9 | 18.6 | 21.3 |  |
+| C3 | S0 | L | poll | post | 16 | 1.0 | 7.2 | 14.6 | 18.0 |  |
+| C1 | S0 | L | post_intent | pre | 3 | 1.0 | 8.5 | 25.0 | 26.4 |  |
+| C1 | S0 | L | post_intent | attack | 4 | 1.0 | 9.8 | 11.5 | 11.7 |  |
+| C1 | S0 | L | post_intent | post | 2 | 1.0 | 6.2 | 7.2 | 7.3 |  |
+| C2 | S0 | L | post_intent | pre | 3 | 1.0 | 32.1 | 46.6 | 47.9 |  |
+| C2 | S0 | L | post_intent | attack | 4 | 1.0 | 7.0 | 34.1 | 37.9 |  |
+| C2 | S0 | L | post_intent | post | 2 | 1.0 | 9.6 | 14.0 | 14.4 |  |
+| C3 | S0 | L | post_intent | pre | 6 | 1.0 | 38.0 | 60.9 | 63.6 |  |
+| C3 | S0 | L | post_intent | attack | 8 | 1.0 | 10.8 | 14.7 | 15.1 |  |
+| C3 | S0 | L | post_intent | post | 4 | 1.0 | 6.6 | 10.4 | 10.8 |  |
+| C1 | S0 | L-install | all | pre | 5 | 1.0 | 304.1 | 334.1 | 339.3 |  |
+| C1 | S0 | L-install | all | attack | 8 | 1.0 | 295.4 | 311.9 | 313.1 |  |
+| C1 | S0 | L-install | all | post | 4 | 1.0 | 284.9 | 308.7 | 311.7 |  |
+| C2 | S0 | L-install | all | pre | 5 | 1.0 | 307.3 | 356.9 | 361.7 |  |
+| C2 | S0 | L-install | all | attack | 8 | 1.0 | 301.5 | 317.2 | 321.3 |  |
+| C2 | S0 | L-install | all | post | 4 | 1.0 | 291.5 | 298.0 | 298.1 |  |
+| C3 | S0 | L-install | all | pre | 10 | 1.0 | 315.9 | 342.1 | 347.2 |  |
+| C3 | S0 | L-install | all | attack | 16 | 1.0 | 295.4 | 313.4 | 314.0 |  |
+| C3 | S0 | L-install | all | post | 8 | 1.0 | 300.2 | 315.4 | 319.4 |  |
+| C1 | S0 | L-install | install | pre | 3 | 1.0 | 292.3 | 302.9 | 303.9 |  |
+| C1 | S0 | L-install | install | attack | 4 | 1.0 | 279.4 | 287.7 | 288.7 |  |
+| C1 | S0 | L-install | install | post | 2 | 1.0 | 297.6 | 311.0 | 312.2 |  |
+| C2 | S0 | L-install | install | pre | 3 | 1.0 | 280.8 | 327.5 | 331.7 |  |
+| C2 | S0 | L-install | install | attack | 4 | 1.0 | 295.5 | 319.1 | 321.7 |  |
+| C2 | S0 | L-install | install | post | 2 | 1.0 | 278.9 | 285.0 | 285.6 |  |
+| C3 | S0 | L-install | install | pre | 6 | 1.0 | 316.3 | 344.9 | 347.8 |  |
+| C3 | S0 | L-install | install | attack | 8 | 1.0 | 286.9 | 307.7 | 312.8 |  |
+| C3 | S0 | L-install | install | post | 4 | 1.0 | 286.7 | 298.7 | 300.1 |  |
+| C1 | S0 | L-install | remove | pre | 2 | 1.0 | 324.2 | 339.0 | 340.3 |  |
+| C1 | S0 | L-install | remove | attack | 4 | 1.0 | 305.8 | 312.7 | 313.3 |  |
+| C1 | S0 | L-install | remove | post | 2 | 1.0 | 164.2 | 274.9 | 284.7 |  |
+| C2 | S0 | L-install | remove | pre | 2 | 1.0 | 335.1 | 360.1 | 362.3 |  |
+| C2 | S0 | L-install | remove | attack | 4 | 1.0 | 302.9 | 307.1 | 307.6 |  |
+| C2 | S0 | L-install | remove | post | 2 | 1.0 | 297.7 | 298.1 | 298.1 |  |
+| C3 | S0 | L-install | remove | pre | 4 | 1.0 | 315.7 | 329.6 | 331.2 |  |
+| C3 | S0 | L-install | remove | attack | 8 | 1.0 | 299.5 | 311.6 | 312.9 |  |
+| C3 | S0 | L-install | remove | post | 4 | 1.0 | 304.9 | 318.3 | 320.0 |  |
+| C2 | baseline | L | all | pre | 75 | 1.0 | 16.8 | 40.5 | 60.5 |  |
+| C2 | baseline | L | all | attack | 144 | 1.0 | 13.3 | 27.1 | 33.4 |  |
+| C2 | baseline | L | all | post | 72 | 1.0 | 10.6 | 24.3 | 29.9 |  |
+| C2 | baseline | L | delete_intent | pre | 2 | 1.0 | 48.0 | 55.6 | 56.2 |  |
+| C2 | baseline | L | delete_intent | attack | 4 | 1.0 | 22.8 | 24.7 | 24.9 |  |
+| C2 | baseline | L | delete_intent | post | 2 | 1.0 | 22.6 | 24.8 | 25.0 |  |
+| C2 | baseline | L | get_flows | pre | 20 | 1.0 | 13.7 | 27.8 | 32.3 |  |
+| C2 | baseline | L | get_flows | attack | 40 | 1.0 | 12.3 | 22.0 | 29.7 |  |
+| C2 | baseline | L | get_flows | post | 20 | 1.0 | 9.3 | 17.4 | 19.5 |  |
+| C2 | baseline | L | get_hosts | pre | 20 | 1.0 | 25.6 | 40.2 | 65.8 |  |
+| C2 | baseline | L | get_hosts | attack | 40 | 1.0 | 21.3 | 29.4 | 34.4 |  |
+| C2 | baseline | L | get_hosts | post | 20 | 1.0 | 12.6 | 29.1 | 31.7 |  |
+| C2 | baseline | L | get_intents | pre | 20 | 1.0 | 12.6 | 19.9 | 20.7 |  |
+| C2 | baseline | L | get_intents | attack | 40 | 1.0 | 13.3 | 22.8 | 25.6 |  |
+| C2 | baseline | L | get_intents | post | 20 | 1.0 | 11.3 | 20.7 | 22.4 |  |
+| C2 | baseline | L | poll | pre | 10 | 1.0 | 15.6 | 32.1 | 40.6 |  |
+| C2 | baseline | L | poll | attack | 16 | 1.0 | 5.8 | 15.3 | 16.6 |  |
+| C2 | baseline | L | poll | post | 8 | 1.0 | 5.2 | 11.7 | 12.7 |  |
+| C2 | baseline | L | post_intent | pre | 3 | 1.0 | 16.7 | 47.8 | 50.5 |  |
+| C2 | baseline | L | post_intent | attack | 4 | 1.0 | 12.2 | 17.6 | 18.2 |  |
+| C2 | baseline | L | post_intent | post | 2 | 1.0 | 10.4 | 10.9 | 11.0 |  |
+| C2 | baseline | L-install | all | pre | 5 | 1.0 | 318.1 | 334.1 | 335.2 |  |
+| C2 | baseline | L-install | all | attack | 8 | 1.0 | 290.0 | 302.6 | 305.9 |  |
+| C2 | baseline | L-install | all | post | 4 | 1.0 | 283.9 | 295.2 | 296.7 |  |
+| C2 | baseline | L-install | install | pre | 3 | 1.0 | 310.3 | 333.0 | 335.0 |  |
+| C2 | baseline | L-install | install | attack | 4 | 1.0 | 289.9 | 304.7 | 306.3 |  |
+| C2 | baseline | L-install | install | post | 2 | 1.0 | 281.5 | 283.4 | 283.6 |  |
+| C2 | baseline | L-install | remove | pre | 2 | 1.0 | 323.2 | 327.9 | 328.3 |  |
+| C2 | baseline | L-install | remove | attack | 4 | 1.0 | 290.0 | 294.6 | 294.9 |  |
+| C2 | baseline | L-install | remove | post | 2 | 1.0 | 290.6 | 296.5 | 297.0 |  |
+
+## ping
+
+| config | workload | csv | window | pings | loss_pct | rtt_p50_ms | rtt_p95_ms |
+|---|---|---|---|---|---|---|---|
+| C1 | S0 | L-ping | pre | 58 | 0.0 | 0.089 | 0.117 |
+| C1 | S0 | L-ping | attack | 117 | 0.0 | 0.053 | 0.092 |
+| C1 | S0 | L-ping | post | 59 | 0.0 | 0.058 | 0.106 |
+| C2 | S0 | L-ping | pre | 58 | 0.0 | 0.053 | 0.114 |
+| C2 | S0 | L-ping | attack | 117 | 0.0 | 0.056 | 0.113 |
+| C2 | S0 | L-ping | post | 59 | 0.0 | 0.086 | 0.112 |
+| C3 | S0 | L-ping | pre | 116 | 0.0 | 0.056 | 0.118 |
+| C3 | S0 | L-ping | attack | 234 | 0.0 | 0.059 | 0.113 |
+| C3 | S0 | L-ping | post | 117 | 0.0 | 0.084 | 0.132 |
+| C2 | baseline | L-ping | pre | 58 | 0.0 | 0.092 | 0.124 |
+| C2 | baseline | L-ping | attack | 117 | 0.0 | 0.091 | 0.113 |
+| C2 | baseline | L-ping | post | 59 | 0.0 | 0.057 | 0.111 |

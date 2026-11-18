@@ -95,11 +95,11 @@ public final class TokenBucketLimiter {
     }
 
     /**
-     * Current token counts (without refilling), for monitoring.
+     * Current token counts (without refilling); for tests.
      *
      * @return key to tokens
      */
-    public Map<String, Double> tokens() {
+    Map<String, Double> tokens() {
         ImmutableMap.Builder<String, Double> m = ImmutableMap.builder();
         buckets.forEach((k, b) -> {
             synchronized (b) {
@@ -109,8 +109,36 @@ public final class TokenBucketLimiter {
         return m.build();
     }
 
-    /** Forgets all buckets (they restart full). */
-    public void reset() {
+    /**
+     * Bucket key of a tenant (shared by the B2 filter and the B6 fixed policy).
+     *
+     * @param tenantId tenant id
+     * @return key
+     */
+    public static String tenantKey(String tenantId) {
+        return "tenant:" + tenantId;
+    }
+
+    /**
+     * Scales a bucket's current tokens (B6 fixed policy "rate": the cap applies
+     * immediately, not only to the refill). A missing bucket is left alone.
+     *
+     * @param key    bucket key
+     * @param factor factor in (0, 1]
+     */
+    public void scale(String key, double factor) {
+        Bucket b = buckets.get(key);
+        if (b != null) {
+            synchronized (b) {
+                if (b.tokens > 0) {
+                    b.tokens *= factor;
+                }
+            }
+        }
+    }
+
+    /** Forgets all buckets (they restart full); for tests. */
+    void reset() {
         buckets.clear();
     }
 }

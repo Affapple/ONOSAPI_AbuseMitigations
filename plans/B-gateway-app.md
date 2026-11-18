@@ -26,11 +26,10 @@ Layer 2:
   QuotaManager        flow/intent counts per tenant ApplicationId + churn window
   PayloadValidator    format + meaning checks
   ConflictDetector    ownership, spoofing, cross-tenant overlap
-Auditor               FlowRuleListener + IntentListener: flags rules not created through the gateway
 ```
 
 The request flow:
-1. `GatewayFilter` handles every request: identify the tenant, ACL, throttle state, rate limit, size limit, audit log.
+1. `GatewayFilter` handles every request: identify the tenant, ACL, throttle state, rate limit, size limit.
 2. The request goes to the resource.
 3. For flows and intents, layer 2 runs: validate → ownership/conflict → quota.
 4. Install through `FlowRuleService` / `IntentService` with the tenant's `ApplicationId`.
@@ -120,7 +119,7 @@ A request that would exceed a quota is rejected whole (409/429 with the reason).
 - **Cross-tenant overlap:** for each existing rule of another tenant on the same device, test whether the two matches can both match the same packet (compare criteria field by field; IP prefixes overlap when one contains the other). An overlap where the new rule has priority ≥ the existing one is rejected, because it would take over the other tenant's traffic. Overlap at a lower priority is allowed.
 - **Destination capture:** a match on `ETH_DST`/`IPV4_DST` belonging to another tenant is rejected unless the actions only forward toward that destination. Simplest rule to start with: reject it.
 - **Intents:** reject any intent whose endpoint is attached to another tenant's edge port.
-- **Compiled-flow check (detective, defence in depth):** after an intent reaches `INSTALLED`, look at the compiled flows (`IntentService.getInstallableIntents(key)` → FlowRuleIntent rules). If any of them, on any device, overlaps another tenant's rules or traffic as defined above, withdraw the intent, count a conflict violation (B6), and record it in the audit log. This catches compilations the selector check didn't anticipate.
+- **Compiled-flow check (detective, defence in depth):** after an intent reaches `INSTALLED`, look at the compiled flows (`IntentService.getInstallableIntents(key)` → FlowRuleIntent rules). If any of them, on any device, overlaps another tenant's rules or traffic as defined above, withdraw the intent, count a conflict violation (B6), and log it. This catches compilations the selector check didn't anticipate.
 
 **Test:** each S4 variant gets a 409 conflict; t2's traffic (iperf h2a→h2b) is unaffected.
 
@@ -141,13 +140,24 @@ A request that would exceed a quota is rejected whole (409/429 with the reason).
 
 **Test:** run S1 and then S3 in a row → the level rises; after the attack stops, it decays back to 0.
 
-## B7. Auditor
+## B7. Auditor: REMOVED (user decision, 2026-11-18)
 
-- A `FlowRuleListener` reports rules that appear with an app ID outside {tenant app IDs, core/system apps}.
-- An `IntentListener` does the same for intents.
-- Exposed as counters on `/gw/admin/audit`. In config 3 the count should be 0; any non-zero count means a gap in the gateway.
+A bypass auditor (listeners flagging flows/intents that didn't come through the gateway) was built and then removed as unnecessary complexity. Tenants can't reach `/onos/v1` at all (A2: 403 on every other context), and the harness reports flows that belong to neither a tenant nor ONOS core.
 
 ---
+
+## B8. Settings refactor ("Option B", user decision 2026-11-18)
+
+`GatewayManager` stays the **single** ONOS component, so that one `cfg set` target switches C1/C2/C3 atomically. Each module owns how its settings are read:
+- `XSettings.from(Dictionary props)` (or `XLimits.from`) per module: parsing, defaults, sanity checks and warnings live there;
+- property names and defaults live as constants in each module's package;
+- the background listeners move into their module (compiled-flow monitor → `conflict/`); `GatewayManager` only starts and stops them.
+
+`GatewayManager` keeps only the `@Component` property list (ONOS requires it there), the toggles, tenant loading and lifecycle.
+
+Success criterion: the `cfg set` names don't change, and every unit test and VM suite passes unchanged.
+
+**Code style (user preference):** use Lombok (`@Getter`, `@Value`, etc.) instead of hand-written getters or boilerplate. Keep code short. Comments must satisfy ONOS checkstyle: the first sentence ends with a period, no trailing spaces.
 
 ## Testing strategy
 

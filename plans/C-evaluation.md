@@ -38,4 +38,4 @@ The scenarios are {baseline (L only), S1, S2, S3, S4}, each paired with L, run u
 
 - One table per scenario: rows C1/C2/C3; columns CPU (mean/peak), heap (peak), L's HTTP p95, L's flow-install p95, L's throughput, flows held by the attacker, rejections by reason.
 - Time-series plots per scenario: CPU and L latency over the 120 s, with the attack window shaded.
-- Auditor count for each C3 run (expected 0).
+- Peak number of flows that belong to neither a tenant nor ONOS core, per run (expected 0 in C2/C3; the harness reports it).

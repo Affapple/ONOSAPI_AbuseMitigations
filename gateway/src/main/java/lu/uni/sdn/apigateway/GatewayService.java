@@ -1,19 +1,16 @@
 package lu.uni.sdn.apigateway;
 
-import java.util.Map;
-import java.util.Set;
-
-import lu.uni.sdn.apigateway.audit.BypassAuditor;
-import lu.uni.sdn.apigateway.audit.RejectionCounters;
 import lu.uni.sdn.apigateway.quota.QuotaLimits;
 import lu.uni.sdn.apigateway.quota.QuotaManager;
+import lu.uni.sdn.apigateway.ratelimit.RateLimitSettings;
 import lu.uni.sdn.apigateway.ratelimit.TokenBucketLimiter;
 import lu.uni.sdn.apigateway.throttle.ThrottleManager;
 import lu.uni.sdn.apigateway.throttle.ThrottleSettings;
 import lu.uni.sdn.apigateway.validation.ValidationLimits;
 
 /**
- * Gateway state shared with the REST layer.
+ * Gateway state shared with the REST layer. Every settings object is an immutable
+ * snapshot replaced on {@code cfg set}.
  */
 public interface GatewayService {
 
@@ -21,129 +18,91 @@ public interface GatewayService {
     String APP_NAME = "lu.uni.sdn.api_gateway";
 
     /**
-     * Current registry + tenant app ids, as one immutable snapshot
-     * (empty until tenants.json is loaded through netcfg).
+     * Registry + tenant app ids (empty until tenants.json is loaded through netcfg).
      *
      * @return snapshot
      */
-    GatewaySnapshot snapshot();
+    GatewaySnapshot getSnapshot();
 
     /**
-     * Current module switches.
+     * Module on/off switches.
      *
-     * @return toggles snapshot
+     * @return toggles
      */
-    ModuleToggles toggles();
+    ModuleToggles getToggles();
 
     /**
-     * Current read-proxy settings.
+     * Read-proxy settings.
      *
-     * @return proxy settings
+     * @return settings
      */
-    ProxySettings proxySettings();
+    ProxySettings getProxySettings();
 
     /**
-     * Current rate-limit numbers.
+     * B2 settings.
      *
-     * @return limits snapshot
+     * @return settings
      */
-    Limits limits();
+    RateLimitSettings getRateLimitSettings();
 
     /**
-     * The per-tenant token buckets (shared by all requests).
+     * B2 per-tenant token buckets.
      *
      * @return limiter
      */
-    TokenBucketLimiter rateLimiter();
+    TokenBucketLimiter getLimiter();
 
     /**
-     * Current default quota limits (component config; tenants.json may override per tenant).
+     * B3 default quota limits (tenants.json may override per tenant).
      *
-     * @return limits snapshot
+     * @return limits
      */
-    QuotaLimits quotaLimits();
+    QuotaLimits getQuotaLimits();
 
     /**
-     * Per-tenant quota accounting.
+     * B3 per-tenant quota accounting.
      *
      * @return quota manager
      */
-    QuotaManager quotaManager();
+    QuotaManager getQuotaManager();
 
     /**
-     * Current payload validation limits.
+     * B4 limits.
      *
-     * @return limits snapshot
+     * @return limits
      */
-    ValidationLimits validationLimits();
+    ValidationLimits getValidationLimits();
 
     /**
-     * Records a B5 conflict violation of a tenant (submit-time 409 or compiled conflict).
-     * B6 (adaptive throttling) will consume these.
+     * B6 settings.
      *
-     * @param tenantId tenant
-     * @param reason   reason code
-     * @param message  detail
+     * @return settings
      */
-    void recordConflict(String tenantId, String reason, String message);
+    ThrottleSettings getThrottleSettings();
 
     /**
-     * Conflict violations per reason code of a tenant.
-     *
-     * @param tenantId tenant
-     * @return reason to count
-     */
-    Map<String, Integer> conflicts(String tenantId);
-
-    /**
-     * Last conflict message of a tenant.
-     *
-     * @param tenantId tenant
-     * @return message, or null
-     */
-    String lastConflict(String tenantId);
-
-    /**
-     * Per-tenant adaptive throttling state (B6).
+     * B6 per-tenant throttling state.
      *
      * @return throttle manager
      */
-    ThrottleManager throttleManager();
+    ThrottleManager getThrottleManager();
 
     /**
-     * Current B6 settings.
-     *
-     * @return settings snapshot
-     */
-    ThrottleSettings throttleSettings();
-
-    /**
-     * Adds a rejection of a tenant to its B6 score (no-op while adaptiveEnabled is off).
-     *
-     * @param tenantId          tenant (null: ignored)
-     * @param reason            rejection reason code
-     * @param formatOnFlowWrite the rejected request was a POST/DELETE to /gw/flows or /gw/intents
-     */
-    void recordViolation(String tenantId, String reason, boolean formatOnFlowWrite);
-
-    /**
-     * Bypass auditor (B7).
-     *
-     * @return auditor
-     */
-    BypassAuditor auditor();
-
-    /**
-     * Per-tenant rejection counters (all modules).
+     * Rejection counters of every module, per tenant.
      *
      * @return counters
      */
-    RejectionCounters rejections();
+    RejectionCounters getRejections();
 
     /**
-     * Current audit allowlist of non-tenant appIds.
+     * The one place a rejection is recorded: counted per tenant/module/reason and, for
+     * tenant callers with adaptiveEnabled, added to the B6 score (which may cap the
+     * tenant's B2 bucket when a fixed penalty starts).
      *
-     * @return appIds
+     * @param tenantId          tenant, or null for non-tenant callers
+     * @param reason            reason code
+     * @param message           detail (may be null)
+     * @param formatOnFlowWrite the request was a POST/DELETE to /gw/flows or /gw/intents
      */
-    Set<String> auditAllowedApps();
+    void recordRejection(String tenantId, String reason, String message, boolean formatOnFlowWrite);
 }

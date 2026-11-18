@@ -1,0 +1,8 @@
+== C3/S0/2 2026-11-18T07:45:12-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 120 --out /home/mininet/project/results/C3/S0/2/L.csv
+S0: sleep 60
+waiting for /tmp/sdn-onos.lock
+S0 exit 0
+L exit 0
+valid
+== restore default VM state

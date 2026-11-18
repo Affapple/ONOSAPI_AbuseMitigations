@@ -1,7 +1,12 @@
 package lu.uni.sdn.apigateway.acl;
 
+import com.google.common.collect.ImmutableMap;
+
+import java.util.Map;
+
 /**
- * Reason codes carried in every gateway error body: {"code", "reason", "message"}.
+ * Reason codes carried in every gateway error body: {"code", "reason", "message"},
+ * and the one table mapping each code to the module that produced it.
  */
 public final class Reasons {
 
@@ -65,4 +70,38 @@ public final class Reasons {
     public static final String UPSTREAM_REJECTED = "upstream_rejected";
     /** Anything unexpected. 500. */
     public static final String INTERNAL_ERROR = "internal_error";
+
+    /** Module that produced a reason code; also selects its B6 throttle weight. */
+    public enum Category { ACL, RATELIMIT, QUOTA, VALIDATION, CONFLICT, THROTTLE, OTHER }
+
+    private static final Map<String, Category> CATEGORY = table(
+            Category.ACL, "acl_denied unknown_account bad_path device_not_owned port_not_owned resource_not_owned "
+                    + "instruction_not_allowed endpoint_not_owned not_owner tenant_mismatch unsupported_intent_type",
+            Category.RATELIMIT, "rate_limited body_too_large batch_too_large batch_mismatch",
+            Category.QUOTA, "quota_flows quota_flows_device quota_intents quota_churn",
+            Category.VALIDATION, "bad_priority permanent_not_allowed bad_timeout criterion_not_allowed "
+                    + "missing_prerequisite controller_output match_not_owned drop_not_owned selector_not_owned "
+                    + "rewrite_not_owned constraints_not_allowed",
+            Category.CONFLICT, "spoofed_source foreign_rewrite dst_capture overlap_conflict compiled_conflict",
+            Category.THROTTLE, "throttled_cooldown throttled_blocked throttled_fixed");
+
+    /**
+     * Category of a reason code.
+     *
+     * @param reason reason code (may be null)
+     * @return its category, OTHER if unknown
+     */
+    public static Category category(String reason) {
+        return reason == null ? Category.OTHER : CATEGORY.getOrDefault(reason, Category.OTHER);
+    }
+
+    private static Map<String, Category> table(Object... categoryThenCodes) {
+        ImmutableMap.Builder<String, Category> b = ImmutableMap.builder();
+        for (int i = 0; i < categoryThenCodes.length; i += 2) {
+            for (String code : ((String) categoryThenCodes[i + 1]).split(" ")) {
+                b.put(code, (Category) categoryThenCodes[i]);
+            }
+        }
+        return b.build();
+    }
 }

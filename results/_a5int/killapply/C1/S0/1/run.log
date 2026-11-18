@@ -1,0 +1,15 @@
+== C1/S0/1 2026-11-18T09:15:15-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 120 --out /home/mininet/project/results/_a5int/killapply/C1/S0/1/L.csv
+S0: sleep 60
+waiting for /tmp/sdn-onos.lock
+== config C1 (overlay noctl ) 2026-11-18T09:15:15-08:00
+== 0. save current users.properties
+saved to /tmp/users.properties.prev.aAeqCk (md5 0e4f83128e448db9376be09ad2a72574)
+== 1. copy /home/mininet/project/karaf/users.noctl.properties
+users.properties md5 a4015246dc359becc5fadcf2fb37791f
+== 2. docker restart onos
+/home/mininet/project/harness/config.sh: line 43: 26507 Terminated              "$P/karaf/apply.sh" $restart "$overlay"
+config.sh: ABORT: karaf/apply.sh noctl
+run.sh: INVALID: config.sh failed
+INVALID: config.sh failed; docker.csv: None rows (< 110); flows.csv: None rows (< 12); heap.csv: None rows (< 60); L.csv: None data rows
+== restore default VM state

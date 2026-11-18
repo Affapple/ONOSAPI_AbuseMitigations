@@ -133,13 +133,12 @@ public class FlowsResource extends GatewayResource {
         if (r.getToggles().isConflictEnabled() && !isAdmin(r)) {
             Optional<Ownership.Violation> cv = conflicts(r, t, rules);
             if (cv.isPresent()) {
-                get(GatewayService.class).recordConflict(t.getId(), cv.get().getReason(), cv.get().getMessage());
                 throw reject(CONFLICT, cv.get().getReason(), cv.get().getMessage());
             }
         }
         // B3: check -> apply -> record under the tenant's lock (no two requests of one
         // tenant can both pass a check only one of them fits).
-        QuotaManager qm = get(GatewayService.class).quotaManager();
+        QuotaManager qm = get(GatewayService.class).getQuotaManager();
         ReentrantLock lock = qm.lock(t.getId());
         lock.lock();
         try {
@@ -150,8 +149,6 @@ public class FlowsResource extends GatewayResource {
                     throw quotaReject(qv.get());
                 }
             }
-            // B7: mark before applying, so the auditor's listener sees the mark first
-            rules.forEach(rule -> get(GatewayService.class).auditor().markGatewayFlow(rule.id().value()));
             get(FlowRuleService.class).applyFlowRules(rules.toArray(new FlowRule[0]));
             qm.recordFlowAdds(t.getId(), rules);
             if (!isAdmin(r)) {
@@ -244,7 +241,7 @@ public class FlowsResource extends GatewayResource {
      * in its owner tenant's pending ledger so quota counts drop immediately.
      */
     private void remove(GatewayRequest r, List<FlowEntry> entries) {
-        QuotaManager qm = get(GatewayService.class).quotaManager();
+        QuotaManager qm = get(GatewayService.class).getQuotaManager();
         String caller = isAdmin(r) ? null : r.getIdentity().getTenantId();
         ReentrantLock lock = caller == null ? null : qm.lock(caller);
         if (lock != null) {

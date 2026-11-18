@@ -19,7 +19,7 @@ import java.io.IOException;
  * Runs for every response, including requests aborted by GatewayFilter, so rejections of
  * every layer (ACL, B2, B3, B4, B5) are scored in one place. B6's own throttled_* answers
  * weigh 0 (see ThrottleManager). Admins and non-tenant callers are not scored. Every
- * rejection (any caller) is also counted per tenant/module/reason for /gw/admin/audit (B7).
+ * rejection (any caller) is also counted per tenant/module/reason (conflicts shown on /gw/admin/tenants).
  */
 public class GatewayResponseFilter implements ContainerResponseFilter {
 
@@ -40,13 +40,13 @@ public class GatewayResponseFilter implements ContainerResponseFilter {
         if (!(entity instanceof String)) {
             return;                       // proxied upstream bodies (byte[]) are not gateway rejections
         }
-        String reason;
+        JsonNode body;
         try {
-            JsonNode n = MAPPER.readTree((String) entity);
-            reason = n == null ? null : n.path("reason").asText(null);
+            body = MAPPER.readTree((String) entity);
         } catch (IOException e) {
             return;
         }
+        String reason = body == null ? null : body.path("reason").asText(null);
         if (reason == null) {
             return;
         }
@@ -57,16 +57,13 @@ public class GatewayResponseFilter implements ContainerResponseFilter {
             return;                       // gateway stopping
         }
         boolean tenantCaller = id.getTenantId() != null && id.getGatewayRole() != GatewayRole.ADMIN;
-        svc.rejections().count(tenantCaller ? id.getTenantId() : null, reason);     // B7 counters: every rejection
-        if (!tenantCaller) {
-            return;
-        }
         String m = req.getMethod();
-        boolean write = m.equals("POST") || m.equals("DELETE");
         Object gr = req.getProperty(GatewayFilter.REQUEST_PROPERTY);
-        boolean flowPath = gr instanceof GatewayRequest && !((GatewayRequest) gr).getSegments().isEmpty()
+        boolean flowWrite = (m.equals("POST") || m.equals("DELETE")) && gr instanceof GatewayRequest
+                && !((GatewayRequest) gr).getSegments().isEmpty()
                 && ("flows".equals(((GatewayRequest) gr).getSegments().get(0))
                     || "intents".equals(((GatewayRequest) gr).getSegments().get(0)));
-        svc.recordViolation(id.getTenantId(), reason, write && flowPath);
+        svc.recordRejection(tenantCaller ? id.getTenantId() : null, reason, body.path("message").asText(null),
+                flowWrite);
     }
 }

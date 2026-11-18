@@ -1,0 +1,8 @@
+== C2/baseline/1 2026-11-18T09:16:36-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 120 --out /home/mininet/project/results/_a5test2/C2/baseline/1/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+L exit 0
+run.sh: INVALID: collector pid 29393 died
+INVALID: collector pid 29393 died; heap.csv: 24 rows (< 60)
+== restore default VM state

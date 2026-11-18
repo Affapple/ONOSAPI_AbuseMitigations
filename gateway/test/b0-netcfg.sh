@@ -17,7 +17,8 @@ curl -s -u $U -X DELETE $NC -w 'HTTP %{http_code}\n'
 sleep 1; echo "whoami onos after removal:"; who
 echo "### 4. valid registry pushed, then app reinstalled WITHOUT re-push"
 curl -s -o /dev/null -u $U -X POST -H 'Content-Type: application/json' $NC --data-binary @/home/mininet/gw/tenants.json -w 'push HTTP %{http_code}\n'
-sh /home/mininet/gw/vm-install.sh /home/mininet/gw/api_gateway-1.0-SNAPSHOT.oar | grep -E 'HTTP|ACTIVE'
+out=$(sh /home/mininet/gw/vm-install.sh /home/mininet/gw/api_gateway-1.0-SNAPSHOT.oar 2>&1) || { echo "$out"; echo "FAIL: reinstall failed, gateway may be uninstalled"; exit 1; }
+echo "$out" | grep -E 'HTTP|ACTIVE'
 for i in 1 2 3 4 5 6 7 8 9 10; do c=$(curl -s -o /dev/null -w '%{http_code}' -u $U http://localhost:8181/onos/gw/whoami); [ "$c" = 200 ] && break; sleep 1; done
 echo "whoami onos after reinstall:"; who
 echo "netcfg still present after reinstall:"; curl -s -u $U $NC -o /dev/null -w 'GET netcfg HTTP %{http_code}\n'

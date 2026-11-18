@@ -1,0 +1,8 @@
+== config C1 (overlay noctl ) 2026-11-18T09:15:15-08:00
+== 0. save current users.properties
+saved to /tmp/users.properties.prev.aAeqCk (md5 0e4f83128e448db9376be09ad2a72574)
+== 1. copy /home/mininet/project/karaf/users.noctl.properties
+users.properties md5 a4015246dc359becc5fadcf2fb37791f
+== 2. docker restart onos
+/home/mininet/project/harness/config.sh: line 43: 26507 Terminated              "$P/karaf/apply.sh" $restart "$overlay"
+config.sh: ABORT: karaf/apply.sh noctl

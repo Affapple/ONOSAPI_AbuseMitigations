@@ -210,8 +210,8 @@ def main():
         expect("rateFactor 0.1 during the penalty, no level", t["rateFactor"] == 0.1 and t["level"] == 0)
         slow = paced(2.0)
         print("      penalized: %d requests at 8/s -> %d x 200, %d x 429" % (len(slow), slow.count(200), slow.count(429)))
-        expect("penalized: the 1/s refill only covers the bucket + ~2 more (<= 9 x 200), the rest 429",
-               slow.count(200) <= 9 and slow.count(429) >= len(slow) - 9 and all(c in (200, 429) for c in slow))
+        expect("penalized at once: tokens scaled x0.1 (5 -> 0.5) + 1/s refill -> <= 4 x 200, the rest 429",
+               slow.count(200) <= 4 and slow.count(429) >= len(slow) - 4 and all(c in (200, 429) for c in slow))
         wait_until(lambda: thr("t1")["fixedRemaining"] == 0, 20)
         time.sleep(1.0)                                         # refill at the full rate again
         after = paced(1.5)

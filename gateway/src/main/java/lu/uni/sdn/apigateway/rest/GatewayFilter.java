@@ -3,12 +3,12 @@ package lu.uni.sdn.apigateway.rest;
 import com.google.common.io.ByteStreams;
 import lu.uni.sdn.apigateway.GatewayService;
 import lu.uni.sdn.apigateway.GatewaySnapshot;
-import lu.uni.sdn.apigateway.Limits;
 import lu.uni.sdn.apigateway.ModuleToggles;
 import lu.uni.sdn.apigateway.acl.PathAcl;
 import lu.uni.sdn.apigateway.acl.PathSanitizer;
 import lu.uni.sdn.apigateway.acl.Reasons;
 import lu.uni.sdn.apigateway.ratelimit.BatchCounter;
+import lu.uni.sdn.apigateway.ratelimit.RateLimitSettings;
 import lu.uni.sdn.apigateway.ratelimit.TokenBucketLimiter;
 import lu.uni.sdn.apigateway.tenant.GatewayRole;
 import lu.uni.sdn.apigateway.throttle.ThrottleManager;
@@ -74,8 +74,8 @@ public class GatewayFilter implements ContainerRequestFilter {
             ctx.abortWith(Errors.response(503, Reasons.UNAVAILABLE, "gateway service not available"));
             return;
         }
-        GatewaySnapshot snap = svc.snapshot();
-        ModuleToggles toggles = svc.toggles();
+        GatewaySnapshot snap = svc.getSnapshot();
+        ModuleToggles toggles = svc.getToggles();
         CallerIdentity id = CallerIdentity.resolve(ctx.getSecurityContext(), snap.registry());
         String method = ctx.getMethod();
         String rawPath = ctx.getUriInfo().getPath(false);
@@ -94,7 +94,8 @@ public class GatewayFilter implements ContainerRequestFilter {
         double rateFactor = 1.0;
         if (toggles.isAdaptiveEnabled() && id.getTenantId() != null && id.getGatewayRole() != GatewayRole.ADMIN) {
             boolean write = method.equals("POST") || method.equals("PUT") || method.equals("DELETE");
-            ThrottleManager.Decision td = svc.throttleManager().check(id.getTenantId(), write, svc.throttleSettings());
+            ThrottleManager.Decision td = svc.getThrottleManager().check(id.getTenantId(), write,
+                    svc.getThrottleSettings());
             if (!td.isAllowed()) {
                 log.debug("DENY {} {} /{} tenant={}: {}", td.getStatus(), method, rawPath, id.getTenantId(),
                           td.getReason());
@@ -110,7 +111,7 @@ public class GatewayFilter implements ContainerRequestFilter {
         // /gw/v1 writes: they are trusted and can use /onos/v1 directly anyway.
         if (toggles.isRateLimitEnabled() && id.getGatewayRole() != GatewayRole.ADMIN) {
             int[] counted = {NOT_COUNTED};
-            if (!rateLimit(ctx, svc.limits(), svc.rateLimiter(), id, method, segments, rawPath, counted,
+            if (!rateLimit(ctx, svc.getRateLimitSettings(), svc.getLimiter(), id, method, segments, rawPath, counted,
                            rateFactor)) {
                 return;
             }
@@ -127,8 +128,8 @@ public class GatewayFilter implements ContainerRequestFilter {
             return;
         }
         ctx.setProperty(REQUEST_PROPERTY,
-                new GatewayRequest(id, snap, toggles, svc.proxySettings(), svc.quotaLimits(),
-                                   svc.validationLimits(), segments, chargedFlows));
+                new GatewayRequest(id, snap, toggles, svc.getProxySettings(), svc.getQuotaLimits(),
+                                   svc.getValidationLimits(), segments, chargedFlows));
         log.debug("ALLOW {} /{} user={} role={} tenant={}", method, rawPath,
                   id.getUser(), id.getGatewayRole().label(), id.getTenantId());
     }
@@ -136,7 +137,7 @@ public class GatewayFilter implements ContainerRequestFilter {
     /**
      * B2. Returns false (and aborts the request) on 413 or 429.
      */
-    private boolean rateLimit(ContainerRequestContext ctx, Limits lim, TokenBucketLimiter limiter,
+    private boolean rateLimit(ContainerRequestContext ctx, RateLimitSettings lim, TokenBucketLimiter limiter,
                               CallerIdentity id, String method, List<String> segments, String rawPath,
                               int[] countedOut, double rateFactor) throws IOException {
         int cost = 1;
@@ -169,7 +170,7 @@ public class GatewayFilter implements ContainerRequestFilter {
             cost = 1;
         }
 
-        String key = id.getTenantId() != null ? "tenant:" + id.getTenantId()
+        String key = id.getTenantId() != null ? TokenBucketLimiter.tenantKey(id.getTenantId())
                 : "user:" + (id.getUser() == null ? "-" : id.getUser());
         TokenBucketLimiter.Result r = limiter.tryAcquire(key, cost, lim.getRateLimitRps() * rateFactor,
                 lim.getRateLimitBurst());

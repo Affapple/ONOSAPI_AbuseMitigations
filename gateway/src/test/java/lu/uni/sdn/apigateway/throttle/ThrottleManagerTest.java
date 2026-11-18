@@ -41,19 +41,19 @@ public class ThrottleManagerTest {
 
     @Test
     public void weightsPerReasonAndOwnRejectionsWeighNothing() {
-        assertEquals(1, ThrottleManager.weightFor("rate_limited", ADAPTIVE), EPS);
-        assertEquals(1, ThrottleManager.weightFor("batch_too_large", ADAPTIVE), EPS);
-        assertEquals(2, ThrottleManager.weightFor("quota_churn", ADAPTIVE), EPS);
-        assertEquals(3, ThrottleManager.weightFor("match_not_owned", ADAPTIVE), EPS);
-        assertEquals(3, ThrottleManager.weightFor("missing_prerequisite", ADAPTIVE), EPS);
-        assertEquals(5, ThrottleManager.weightFor("dst_capture", ADAPTIVE), EPS);
-        assertEquals(5, ThrottleManager.weightFor("compiled_conflict", ADAPTIVE), EPS);
-        assertEquals(3, ThrottleManager.weightFor("port_not_owned", ADAPTIVE), EPS);
-        assertEquals(0, ThrottleManager.weightFor("throttled_blocked", ADAPTIVE), EPS);
-        assertEquals(0, ThrottleManager.weightFor("throttled_cooldown", ADAPTIVE), EPS);
-        assertEquals(0, ThrottleManager.weightFor("throttled_fixed", ADAPTIVE), EPS);
-        assertEquals(0, ThrottleManager.weightFor("not_found", ADAPTIVE), EPS);
-        assertEquals(0, ThrottleManager.weightFor("bad_request", ADAPTIVE), EPS);
+        assertEquals(1, ThrottleManager.weightFor("rate_limited", false, ADAPTIVE), EPS);
+        assertEquals(1, ThrottleManager.weightFor("batch_too_large", false, ADAPTIVE), EPS);
+        assertEquals(2, ThrottleManager.weightFor("quota_churn", false, ADAPTIVE), EPS);
+        assertEquals(3, ThrottleManager.weightFor("match_not_owned", false, ADAPTIVE), EPS);
+        assertEquals(3, ThrottleManager.weightFor("missing_prerequisite", false, ADAPTIVE), EPS);
+        assertEquals(5, ThrottleManager.weightFor("dst_capture", false, ADAPTIVE), EPS);
+        assertEquals(5, ThrottleManager.weightFor("compiled_conflict", false, ADAPTIVE), EPS);
+        assertEquals(3, ThrottleManager.weightFor("port_not_owned", false, ADAPTIVE), EPS);
+        assertEquals(0, ThrottleManager.weightFor("throttled_blocked", false, ADAPTIVE), EPS);
+        assertEquals(0, ThrottleManager.weightFor("throttled_cooldown", false, ADAPTIVE), EPS);
+        assertEquals(0, ThrottleManager.weightFor("throttled_fixed", false, ADAPTIVE), EPS);
+        assertEquals(0, ThrottleManager.weightFor("not_found", false, ADAPTIVE), EPS);
+        assertEquals(0, ThrottleManager.weightFor("bad_request", false, ADAPTIVE), EPS);
         add(0);
         assertEquals(0, st().getScore(), EPS);
     }
@@ -235,6 +235,17 @@ public class ThrottleManagerTest {
         assertFalse(tm.check("t1", true, FIXED).isAllowed());
         advance(2);
         assertTrue("fixed 60 s, then free", tm.check("t1", true, FIXED).isAllowed());
+    }
+
+    /** Audit B7 fix 3: record() reports when a fixed penalty starts (the caller scales the B2 tokens). */
+    @Test
+    public void recordReportsTheStartOfAFixedPenalty() {
+        assertTrue("first violation starts the penalty", tm.record("t1", "match_not_owned", 3, FIXED));
+        assertFalse("further violations extend it", tm.record("t1", "match_not_owned", 3, FIXED));
+        assertFalse("zero weight is ignored", tm.record("t2", "match_not_owned", 0, FIXED));
+        advance(61);
+        assertTrue("a new penalty after the old one expired", tm.record("t1", "match_not_owned", 3, FIXED));
+        assertFalse("adaptive mode never reports one", tm.record("t3", "match_not_owned", 3, ADAPTIVE));
     }
 
     @Test

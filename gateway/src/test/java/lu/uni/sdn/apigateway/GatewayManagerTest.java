@@ -78,15 +78,15 @@ public class GatewayManagerTest {
     @Test
     public void absentAtActivationMeansEmpty() {
         mgr.activate(null);
-        assertSame(GatewaySnapshot.empty(), mgr.snapshot());
-        assertTrue(mgr.snapshot().registry().tenants().isEmpty());
+        assertSame(GatewaySnapshot.empty(), mgr.getSnapshot());
+        assertTrue(mgr.getSnapshot().registry().tenants().isEmpty());
     }
 
     @Test
     public void presentAtActivationLoadsAndRegistersAppIds() {
         netcfg.json = fixture;
         mgr.activate(null);
-        GatewaySnapshot s = mgr.snapshot();
+        GatewaySnapshot s = mgr.getSnapshot();
         assertEquals(2, s.registry().tenants().size());
         assertEquals("lu.uni.sdn.gw.t1", s.appId("t1").get().name());
         assertEquals("lu.uni.sdn.gw.t2", s.appId("t2").get().name());
@@ -99,7 +99,7 @@ public class GatewayManagerTest {
         mgr.activate(null);
         netcfg.json = fixture;
         netcfg.fire(NetworkConfigEvent.Type.CONFIG_ADDED);
-        GatewaySnapshot first = mgr.snapshot();
+        GatewaySnapshot first = mgr.getSnapshot();
         assertEquals(2, first.registry().tenants().size());
 
         // invalid update: previous snapshot is kept (same object)
@@ -107,7 +107,7 @@ public class GatewayManagerTest {
         bad.put("bogus", 1);
         netcfg.json = bad;
         netcfg.fire(NetworkConfigEvent.Type.CONFIG_UPDATED);
-        assertSame(first, mgr.snapshot());
+        assertSame(first, mgr.getSnapshot());
 
         // valid update with a third tenant: new snapshot, new app id
         ObjectNode three = fixture.deepCopy();
@@ -118,7 +118,7 @@ public class GatewayManagerTest {
         t3.putObject("accounts").put("t3-op", "operator");
         netcfg.json = three;
         netcfg.fire(NetworkConfigEvent.Type.CONFIG_UPDATED);
-        GatewaySnapshot second = mgr.snapshot();
+        GatewaySnapshot second = mgr.getSnapshot();
         assertNotSame(first, second);
         assertEquals("lu.uni.sdn.gw.t3", second.appId("t3").get().name());
         assertEquals("t3", second.registry().tenantOf("t3-op").get().getId());
@@ -128,14 +128,14 @@ public class GatewayManagerTest {
         // removed: fail closed
         netcfg.json = null;
         netcfg.fire(NetworkConfigEvent.Type.CONFIG_REMOVED);
-        assertSame(GatewaySnapshot.empty(), mgr.snapshot());
+        assertSame(GatewaySnapshot.empty(), mgr.getSnapshot());
     }
 
     @Test
     public void defaultsWithoutComponentContext() {
         mgr.activate(null);
-        assertTrue(mgr.toggles().isAclEnabled());
-        assertEquals("http://127.0.0.1:8181/onos/v1/", mgr.proxySettings().getBaseUrl());
-        assertEquals("gw-svc-pw", mgr.proxySettings().getServiceAccountPassword());
+        assertTrue(mgr.getToggles().isAclEnabled());
+        assertEquals("http://127.0.0.1:8181/onos/v1/", mgr.getProxySettings().getBaseUrl());
+        assertEquals("gw-svc-pw", mgr.getProxySettings().getServiceAccountPassword());
     }
 }

@@ -133,4 +133,17 @@ public class TokenBucketLimiterTest {
         now.addAndGet(SEC / 10);
         assertTrue(take("t1", 1));
     }
+
+    /** Audit B7 fix 3: a fixed "rate" penalty caps the tokens at once, not only the refill. */
+    @Test
+    public void scaleCapsCurrentTokens() {
+        for (int i = 0; i < 15; i++) {
+            take("t1", 1);
+        }
+        lim.scale(TokenBucketLimiter.tenantKey("x"), 0.1);                 // no bucket: no-op
+        lim.scale("t1", 0.1);                                              // 5 -> 0.5
+        assertEquals(0.5, lim.tokens().get("t1"), 1e-9);
+        assertFalse(take("t1", 1));
+        assertEquals("tenant:t1", TokenBucketLimiter.tenantKey("t1"));
+    }
 }

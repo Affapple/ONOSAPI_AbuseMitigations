@@ -99,11 +99,11 @@ public final class TenantRegistry {
     }
 
     /**
-     * Switch-to-switch ports.
+     * Switch-to-switch ports; for tests.
      *
      * @return trunk ports
      */
-    public ImmutableSet<ConnectPoint> trunkPorts() {
+    ImmutableSet<ConnectPoint> trunkPorts() {
         return trunkPorts;
     }
 

@@ -1,0 +1,54 @@
+{
+ "attackWindow": [
+  null,
+  null
+ ],
+ "build": {
+  "deployedAt": "2026-11-18T20:27:13+01:00",
+  "gitCommit": "25d466882e23766fd3480d5c58de35dd3388b780",
+  "gitDirty": true,
+  "laptopOarMd5": "c717a01e4b6610697c8e684936625454"
+ },
+ "commands": {
+  "L": "python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 120 --out /home/mininet/project/results/_a5int/killapply/C1/S0/1/L.csv",
+  "S0": "sleep 60"
+ },
+ "config": "C1",
+ "duration": 120.0,
+ "exitCodes": {},
+ "gatewayConfig": null,
+ "invalidReasons": [
+  "config.sh failed",
+  "docker.csv: None rows (< 110)",
+  "flows.csv: None rows (< 12)",
+  "heap.csv: None rows (< 60)",
+  "L.csv: None data rows"
+ ],
+ "rep": "1",
+ "scenario": "S0",
+ "state": {
+  "post": {
+   "apps": {
+    "lu.uni.sdn.api_gateway": "ACTIVE",
+    "lu.uni.sdn.southbound_mac_extractor": "INSTALLED",
+    "org.onosproject.fwd": "INSTALLED",
+    "org.onosproject.proxyarp": "INSTALLED"
+   },
+   "containerStartedAt": "2026-11-18T17:14:38.512250247Z",
+   "gateway": {
+    "oarMd5": "c717a01e4b6610697c8e684936625454",
+    "state": "ACTIVE",
+    "version": "1.0.SNAPSHOT"
+   }
+  },
+  "pre": null
+ },
+ "t0": null,
+ "target": "v1",
+ "timestamps": {
+  "ts_collectors_stop": 1795022122.385,
+  "ts_lock": 1795022115.89
+ },
+ "valid": false,
+ "warnings": []
+}

@@ -31,9 +31,20 @@ until [ "$(curl -s -o /dev/null -w '%{http_code}' -u "$CRED" "$URL/applications/
 done
 
 echo "== install + activate $OAR"
-code=$(curl -s -o /tmp/gw-install.out -w '%{http_code}' -u "$CRED" -X POST \
-       -H 'Content-Type: application/octet-stream' "$URL/applications?activate=true" --data-binary @"$OAR")
-echo "HTTP $code"; case $code in 2*) ;; *) cat /tmp/gw-install.out; exit 1;; esac
+# ONOS can answer 404 above while Karaf is still tearing the bundle down; the POST then
+# gets 409 "already installed" and the late uninstall would leave NO gateway. Retry.
+i=0
+while :; do
+    code=$(curl -s -o /tmp/gw-install.out -w '%{http_code}' -u "$CRED" -X POST \
+           -H 'Content-Type: application/octet-stream' "$URL/applications?activate=true" --data-binary @"$OAR")
+    echo "HTTP $code"
+    case $code in
+        2*) break ;;
+        409) i=$((i + 1)); [ $i -gt 10 ] && { cat /tmp/gw-install.out; exit 1; }
+             echo "uninstall still finishing, retry in 3 s"; sleep 3 ;;
+        *) cat /tmp/gw-install.out; exit 1 ;;
+    esac
+done
 
 if [ -n "$TENANTS" ]; then
     sh "$(dirname "$0")/vm-push-tenants.sh" "$TENANTS"

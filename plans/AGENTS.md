@@ -37,7 +37,7 @@ Shared state: restarting or reconfiguring the container, installing/activating/u
 
 **Karaf overlays:** `~/project/karaf/apply.sh <tenant|noctl|stock>` switches `users.properties` and restarts ONOS (about 45–65 s). It takes the lock **itself**, so never wrap it in `flock`; that deadlocks. If you already hold the lock, set `SDN_LOCK_HELD=1`. The default state of the VM is the `tenant` overlay. Always leave it that way. Karaf re-reads `users.properties` on every login, so a copied overlay is live at once, even before the restart. The tenant/noctl overlays have no `guest` account. Default admin credentials (`onos:rocks`, `karaf:karaf`) are out of scope as "stolen admin credentials".
 
-**Lab3 app dependency (pending user decision):** while `lu.uni.sdn.southbound_mac_extractor` is active, it requests priority-5 `ip` and `arp` → CONTROLLER punt rules on every switch. So all unmatched IPv4 traffic reaches ONOS as packet-ins, which feeds host learning and adds controller load. Don't rely on it, and don't deactivate it yourself. The user will decide whether it's deactivated for evaluation runs.
+**Lab3 app: DEACTIVATED** (user decision, 2026-11-18). `lu.uni.sdn.southbound_mac_extractor` is INSTALLED but not active, so its priority-5 `ip`/`arp` → CONTROLLER punt rules are gone from all switches; verified with 0 such rules on s1–s3 and the topology still MATCH. Keep it deactivated, and don't reactivate it. Host learning relies only on `mnctl.sh discover` (ARP via hostprovider).
 
 Don't uninstall or disable apps you didn't install (e.g. `lu.uni.sdn.southbound_mac_extractor` from Lab3).
 

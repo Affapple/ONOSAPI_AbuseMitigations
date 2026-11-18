@@ -152,11 +152,10 @@ public class IntentsResource extends GatewayResource {
                 cv = ConflictDetector.checkRewrites(ci.treatment(), t);
             }
             if (cv.isPresent()) {
-                get(GatewayService.class).recordConflict(t.getId(), cv.get().getReason(), cv.get().getMessage());
                 throw reject(CONFLICT, cv.get().getReason(), cv.get().getMessage());
             }
         }
-        QuotaManager qm = get(GatewayService.class).quotaManager();
+        QuotaManager qm = get(GatewayService.class).getQuotaManager();
         ReentrantLock lock = qm.lock(t.getId());
         lock.lock();
         try {
@@ -169,7 +168,6 @@ public class IntentsResource extends GatewayResource {
                 }
             }
             // B7: mark (by IntentId, unique per submission) before submitting
-            get(GatewayService.class).auditor().markGatewayIntent(intent.id().fingerprint());
             get(IntentService.class).submit(intent);
             qm.recordIntentSubmit(t.getId(), intent.key(), estimate);
             if (!isAdmin(r)) {
@@ -221,7 +219,7 @@ public class IntentsResource extends GatewayResource {
         Key k = intent.key();
         // B3: churn check under the tenant lock; the (up to 5 s) withdraw wait
         // below runs outside the lock so it does not block the tenant's other requests.
-        QuotaManager qm = get(GatewayService.class).quotaManager();
+        QuotaManager qm = get(GatewayService.class).getQuotaManager();
         ReentrantLock lock = qm.lock(t.getId());
         lock.lock();
         try {

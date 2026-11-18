@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lu.uni.sdn.apigateway.GatewayService;
 import lu.uni.sdn.apigateway.acl.Reasons;
-import lu.uni.sdn.apigateway.audit.BypassAuditor;
 import lu.uni.sdn.apigateway.quota.QuotaLimits;
 import lu.uni.sdn.apigateway.quota.QuotaManager;
 import lu.uni.sdn.apigateway.quota.Usage;
@@ -20,7 +19,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.time.Instant;
 
 import static javax.ws.rs.core.Response.Status.NOT_FOUND;
 
@@ -31,12 +29,11 @@ import static javax.ws.rs.core.Response.Status.NOT_FOUND;
  *   GET /gw/admin/tenants        quota limits and usage of every tenant
  *   GET  /gw/admin/tenants/{id}          same, one tenant (quotas, usage, conflicts, throttle)
  *   POST /gw/admin/tenants/{id}/unblock  reset the tenant's B6 score/level/cooldown
- *   GET  /gw/admin/audit                 B7 bypass events + rejection counters
- *   POST /gw/admin/audit/reset           reset the B7 counters
  * </pre>
  */
 @Path("admin")
 public class AdminResource extends GatewayResource {
+
 
     /**
      * All tenants' quota status.
@@ -73,7 +70,7 @@ public class AdminResource extends GatewayResource {
     }
 
     private ObjectNode status(GatewayRequest r, Tenant t) {
-        QuotaManager qm = get(GatewayService.class).quotaManager();
+        QuotaManager qm = get(GatewayService.class).getQuotaManager();
         ApplicationId app = r.getSnapshot().appId(t.getId()).get();
         QuotaLimits lim = r.getQuotaLimits().forTenant(t);
         Usage u = qm.usage(t.getId(), app);
@@ -97,15 +94,15 @@ public class AdminResource extends GatewayResource {
         us.put("churn", qm.churn(t.getId(), lim.getChurnWindowSeconds()));
         GatewayService svc = get(GatewayService.class);
         ObjectNode c = n.putObject("conflicts");
-        svc.conflicts(t.getId()).forEach(c::put);
-        n.put("lastConflict", svc.lastConflict(t.getId()));
+        svc.getRejections().of(t.getId(), "conflict").forEach(c::put);
+        n.put("lastConflict", svc.getRejections().last(t.getId(), "conflict"));
         n.set("throttle", throttle(svc, t.getId(), r));
         return n;
     }
 
     private ObjectNode throttle(GatewayService svc, String tenant, GatewayRequest r) {
-        ThrottleSettings ts = svc.throttleSettings();
-        ThrottleManager.Status st = svc.throttleManager().status(tenant, ts);
+        ThrottleSettings ts = svc.getThrottleSettings();
+        ThrottleManager.Status st = svc.getThrottleManager().status(tenant, ts);
         ObjectNode n = mapper().createObjectNode();
         n.put("adaptiveEnabled", r.getToggles().isAdaptiveEnabled());
         n.put("mode", ts.getMode());
@@ -131,57 +128,6 @@ public class AdminResource extends GatewayResource {
     }
 
     /**
-     * B7 audit: bypass events (flows/intents that did not come through the gateway) and
-     * every gateway rejection per tenant, module and reason.
-     *
-     * @return 200 audit report
-     */
-    @GET
-    @Path("audit")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response audit() {
-        GatewayRequest r = gw();
-        GatewayService svc = get(GatewayService.class);
-        BypassAuditor.Snapshot a = svc.auditor().snapshot();
-        ObjectNode n = mapper().createObjectNode();
-        n.put("auditEnabled", r.getToggles().isAuditEnabled());
-        ArrayNode allow = n.putArray("allowedApps");
-        svc.auditAllowedApps().forEach(allow::add);
-        n.put("bypassTotal", a.getTotal());
-        ObjectNode bk = n.putObject("byKind");
-        a.getByKind().forEach(bk::put);
-        ObjectNode ba = n.putObject("byAppId");
-        a.getByAppId().forEach(ba::put);
-        ObjectNode bw = n.putObject("byReason");
-        a.getByWhy().forEach(bw::put);
-        ArrayNode recent = n.putArray("recent");
-        for (BypassAuditor.Bypass b : a.getRecent()) {
-            recent.addObject().put("time", Instant.ofEpochMilli(b.getEpochMillis()).toString()).put("kind", b.getKind())
-                    .put("device", b.getDevice()).put("appId", b.getAppId()).put("id", b.getId())
-                    .put("why", b.getWhy());
-        }
-        n.put("trackedGatewayFlows", a.getTrackedGatewayFlows());
-        n.put("trackedGatewayIntents", a.getTrackedGatewayIntents());
-        n.set("rejections", mapper().valueToTree(svc.rejections().snapshot()));
-        return ok(n).build();
-    }
-
-    /**
-     * Resets the B7 counters (bypass events and rejection counters), e.g. before a run.
-     *
-     * @return 204
-     */
-    @POST
-    @Path("audit/reset")
-    public Response auditReset() {
-        gw();
-        GatewayService svc = get(GatewayService.class);
-        svc.auditor().reset();
-        svc.rejections().reset();
-        return Response.noContent().build();
-    }
-
-    /**
      * Admin unblock (B6): resets the tenant's score, level, cooldown and fixed penalty.
      *
      * @param id tenant id
@@ -194,7 +140,7 @@ public class AdminResource extends GatewayResource {
         GatewayRequest r = gw();
         Tenant t = r.getSnapshot().registry().tenant(id)
                 .orElseThrow(() -> reject(NOT_FOUND, Reasons.NOT_FOUND, "no tenant " + id));
-        get(GatewayService.class).throttleManager().unblock(t.getId());
+        get(GatewayService.class).getThrottleManager().unblock(t.getId());
         return ok(status(r, t)).build();
     }
 }

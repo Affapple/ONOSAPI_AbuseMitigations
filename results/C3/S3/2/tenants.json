@@ -1,0 +1,213 @@
+{
+ "tenants": {
+  "t1": {
+   "appId": "lu.uni.sdn.gw.t1",
+   "conflicts": {},
+   "lastConflict": null,
+   "quotaEnabled": true,
+   "quotas": {
+    "churnLimit": 200,
+    "churnWindowSeconds": 60,
+    "maxFlowsPerTenant": 100,
+    "maxFlowsPerTenantPerDevice": 40,
+    "maxIntentsPerTenant": 20
+   },
+   "throttle": {
+    "adaptiveEnabled": true,
+    "cooldownEntries": 1,
+    "cooldownRemaining": 0,
+    "fixedEffect": "rate",
+    "fixedRemaining": 0,
+    "history": [
+     {
+      "levelAfter": 0,
+      "reason": "match_not_owned",
+      "scoreAfter": 3.0,
+      "secondsAgo": 92.2,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 0,
+      "reason": "drop_not_owned",
+      "scoreAfter": 6.0,
+      "secondsAgo": 92.1,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 0,
+      "reason": "permanent_not_allowed",
+      "scoreAfter": 8.97,
+      "secondsAgo": 91.8,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "port_not_owned",
+      "scoreAfter": 11.95,
+      "secondsAgo": 91.5,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "controller_output",
+      "scoreAfter": 14.92,
+      "secondsAgo": 91.3,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "selector_not_owned",
+      "scoreAfter": 17.88,
+      "secondsAgo": 91.1,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "constraints_not_allowed",
+      "scoreAfter": 20.82,
+      "secondsAgo": 90.8,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "missing_prerequisite",
+      "scoreAfter": 23.76,
+      "secondsAgo": 90.6,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "bad_priority",
+      "scoreAfter": 26.7,
+      "secondsAgo": 90.3,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "match_not_owned",
+      "scoreAfter": 21.83,
+      "secondsAgo": 60.1,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "drop_not_owned",
+      "scoreAfter": 24.77,
+      "secondsAgo": 59.9,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "permanent_not_allowed",
+      "scoreAfter": 27.69,
+      "secondsAgo": 59.6,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "port_not_owned",
+      "scoreAfter": 30.62,
+      "secondsAgo": 59.4,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "controller_output",
+      "scoreAfter": 33.53,
+      "secondsAgo": 59.1,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "selector_not_owned",
+      "scoreAfter": 36.43,
+      "secondsAgo": 58.9,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "constraints_not_allowed",
+      "scoreAfter": 39.33,
+      "secondsAgo": 58.6,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "missing_prerequisite",
+      "scoreAfter": 42.21,
+      "secondsAgo": 58.4,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "match_not_owned",
+      "scoreAfter": 45.09,
+      "secondsAgo": 58.1,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "drop_not_owned",
+      "scoreAfter": 47.96,
+      "secondsAgo": 57.9,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 3,
+      "reason": "permanent_not_allowed",
+      "scoreAfter": 50.82,
+      "secondsAgo": 57.6,
+      "weight": 3.0
+     }
+    ],
+    "level": 3,
+    "mode": "adaptive",
+    "rateFactor": 0.5,
+    "score": 26.12
+   },
+   "usage": {
+    "churn": 0,
+    "directFlows": 0,
+    "estimatedIntentFlows": 0,
+    "flows": 0,
+    "intentFlows": 0,
+    "intents": 0,
+    "perDevice": {}
+   }
+  },
+  "t2": {
+   "appId": "lu.uni.sdn.gw.t2",
+   "conflicts": {},
+   "lastConflict": null,
+   "quotaEnabled": true,
+   "quotas": {
+    "churnLimit": 200,
+    "churnWindowSeconds": 60,
+    "maxFlowsPerTenant": 100,
+    "maxFlowsPerTenantPerDevice": 40,
+    "maxIntentsPerTenant": 20
+   },
+   "throttle": {
+    "adaptiveEnabled": true,
+    "cooldownEntries": 0,
+    "cooldownRemaining": 0,
+    "fixedEffect": "rate",
+    "fixedRemaining": 0,
+    "history": [],
+    "level": 0,
+    "mode": "adaptive",
+    "rateFactor": 1.0,
+    "score": 0.0
+   },
+   "usage": {
+    "churn": 8,
+    "directFlows": 0,
+    "estimatedIntentFlows": 0,
+    "flows": 0,
+    "intentFlows": 0,
+    "intents": 0,
+    "perDevice": {}
+   }
+  }
+ }
+}

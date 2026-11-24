@@ -1,0 +1,81 @@
+== config C1 (overlay noctl ) 2026-11-23T08:47:33-08:00
+== 0. save current users.properties
+saved to /tmp/users.properties.prev.0q0VGr (md5 0e4f83128e448db9376be09ad2a72574)
+== 1. copy /home/mininet/project/karaf/users.noctl.properties
+users.properties md5 a4015246dc359becc5fadcf2fb37791f
+== 2. docker restart onos
+== 3. ready check
+ONOS ready after 48s
+== 4. host rediscovery
+-- ONOS view right after restart, before rediscovery (informational):
+   devices available: ['of:0000000000000001', 'of:0000000000000002', 'of:0000000000000003']
+   hosts known to ONOS: 4
+     h1a  00:00:00:00:01:01 t1             of:0000000000000002/1    ips=['10.0.1.1'] OK
+     h1b  00:00:00:00:01:02 t1             of:0000000000000003/1    ips=['10.0.1.2'] OK
+     h2a  00:00:00:00:02:01 t2             of:0000000000000002/2    ips=['10.0.2.1'] OK
+     h2b  00:00:00:00:02:02 t2             of:0000000000000003/2    ips=['10.0.2.2'] OK
+   RESULT: MATCH
+-- rediscovery:
+devices available: ['of:0000000000000001', 'of:0000000000000002', 'of:0000000000000003']
+link of:0000000000000003/3 -> of:0000000000000001/2 ACTIVE
+link of:0000000000000001/1 -> of:0000000000000002/3 ACTIVE
+link of:0000000000000002/3 -> of:0000000000000001/1 ACTIVE
+link of:0000000000000001/2 -> of:0000000000000003/3 ACTIVE
+link endpoints == trunkPorts ['of:0000000000000001/1', 'of:0000000000000001/2', 'of:0000000000000002/3', 'of:0000000000000003/3']
+RESULT: MATCH (infra only) after 1 tries
+h1a -> 10.0.1.2: no reply, static ARP entry restored
+h1b -> 10.0.1.1: no reply, static ARP entry restored
+h2a -> 10.0.2.2: no reply, static ARP entry restored
+h2b -> 10.0.2.1: no reply, static ARP entry restored
+devices available: ['of:0000000000000001', 'of:0000000000000002', 'of:0000000000000003']
+hosts known to ONOS: 4
+  h1a  00:00:00:00:01:01 t1             of:0000000000000002/1    ips=['10.0.1.1'] OK
+  h1b  00:00:00:00:01:02 t1             of:0000000000000003/1    ips=['10.0.1.2'] OK
+  h2a  00:00:00:00:02:01 t2             of:0000000000000002/2    ips=['10.0.2.1'] OK
+  h2b  00:00:00:00:02:02 t2             of:0000000000000003/2    ips=['10.0.2.2'] OK
+link of:0000000000000003/3 -> of:0000000000000001/2 ACTIVE
+link of:0000000000000001/1 -> of:0000000000000002/3 ACTIVE
+link of:0000000000000002/3 -> of:0000000000000001/1 ACTIVE
+link of:0000000000000001/2 -> of:0000000000000003/3 ACTIVE
+link endpoints == trunkPorts ['of:0000000000000001/1', 'of:0000000000000001/2', 'of:0000000000000002/3', 'of:0000000000000003/3']
+RESULT: MATCH after 1 tries
+== 5. account probe (GET /onos/v1/flows)
+t1-op/guest -> 200 401 (expected 200 401) after 0s
+== 6. app state
+org.onosproject.fwd INSTALLED
+org.onosproject.proxyarp INSTALLED
+org.onosproject.hostprovider ACTIVE
+lu.uni.sdn.southbound_mac_extractor INSTALLED
+lu.uni.sdn.api_gateway ACTIVE
+== gateway ready
+== purge
+onosctl: purge done in 0.0s; 9 core flows left
+== gateway config
+onosctl: C1: all 36 properties read back OK
+== unblock tenants
+onosctl: unblocked ['t1', 't2']
+== discover
+devices available: ['of:0000000000000001', 'of:0000000000000002', 'of:0000000000000003']
+link of:0000000000000003/3 -> of:0000000000000001/2 ACTIVE
+link of:0000000000000001/1 -> of:0000000000000002/3 ACTIVE
+link of:0000000000000002/3 -> of:0000000000000001/1 ACTIVE
+link of:0000000000000001/2 -> of:0000000000000003/3 ACTIVE
+link endpoints == trunkPorts ['of:0000000000000001/1', 'of:0000000000000001/2', 'of:0000000000000002/3', 'of:0000000000000003/3']
+RESULT: MATCH (infra only) after 1 tries
+h1a -> 10.0.1.2: no reply, static ARP entry restored
+h1b -> 10.0.1.1: no reply, static ARP entry restored
+h2a -> 10.0.2.2: no reply, static ARP entry restored
+h2b -> 10.0.2.1: no reply, static ARP entry restored
+devices available: ['of:0000000000000001', 'of:0000000000000002', 'of:0000000000000003']
+hosts known to ONOS: 4
+  h1a  00:00:00:00:01:01 t1             of:0000000000000002/1    ips=['10.0.1.1'] OK
+  h1b  00:00:00:00:01:02 t1             of:0000000000000003/1    ips=['10.0.1.2'] OK
+  h2a  00:00:00:00:02:01 t2             of:0000000000000002/2    ips=['10.0.2.1'] OK
+  h2b  00:00:00:00:02:02 t2             of:0000000000000003/2    ips=['10.0.2.2'] OK
+link of:0000000000000003/3 -> of:0000000000000001/2 ACTIVE
+link of:0000000000000001/1 -> of:0000000000000002/3 ACTIVE
+link of:0000000000000002/3 -> of:0000000000000001/1 ACTIVE
+link of:0000000000000001/2 -> of:0000000000000003/3 ACTIVE
+link endpoints == trunkPorts ['of:0000000000000001/1', 'of:0000000000000001/2', 'of:0000000000000002/3', 'of:0000000000000003/3']
+RESULT: MATCH after 1 tries
+== config C1 done 2026-11-23T08:48:33-08:00

@@ -1,0 +1,137 @@
+{
+ "attackWindow": [
+  1795452651.611,
+  1795452711.611
+ ],
+ "build": {
+  "deployedAt": "2026-11-23T16:20:10+01:00",
+  "gitCommit": "c771966fb29197192cda5c67ea2e0bc6ee9095f9",
+  "gitDirty": true,
+  "laptopOarMd5": "b2020a3e90469a6ab849159137767a9c"
+ },
+ "commands": {
+  "L": "python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S1/2/L.csv",
+  "S1": "python3 /home/mininet/project/scenarios/s1_flood.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S1/2/S1.csv"
+ },
+ "config": "C1",
+ "duration": 120.0,
+ "exitCodes": {
+  "L": 0,
+  "S1": 0
+ },
+ "gatewayConfig": {
+  "config": "C1",
+  "effective": {
+   "adaptiveEnabled": false,
+   "mode": "adaptive",
+   "quotaEnabled": false
+  },
+  "readBack": {
+   "aclEnabled": "false",
+   "adaptiveEnabled": "false",
+   "churnLimit": "200",
+   "churnWindowSeconds": "60",
+   "conflictEnabled": "false",
+   "cooldown": "30",
+   "cooldownMax": "960",
+   "fixedEffect": "rate",
+   "fixedPenalty": "60",
+   "fixedRateFactor": "0.1",
+   "level1Threshold": "10.0",
+   "level2Threshold": "25.0",
+   "level3Threshold": "50.0",
+   "maxBatchSize": "50",
+   "maxBodyBytes": "65536",
+   "maxFlowsPerTenant": "100",
+   "maxFlowsPerTenantPerDevice": "40",
+   "maxIntentsPerTenant": "20",
+   "maxPriority": "30000",
+   "maxTimeout": "300",
+   "minPriority": "100",
+   "proxyBaseUrl": "http://127.0.0.1:8181/onos/v1/",
+   "quotaEnabled": "false",
+   "rateLimitBurst": "20",
+   "rateLimitEnabled": "false",
+   "rateLimitRps": "10.0",
+   "restrictedRateFactor": "0.5",
+   "scoreHalfLife": "60.0",
+   "serviceAccountPassword": "gw-svc-pw",
+   "throttleMode": "adaptive",
+   "validationEnabled": "false",
+   "weightAcl": "3.0",
+   "weightConflict": "5.0",
+   "weightQuota": "2.0",
+   "weightRateLimit": "1.0",
+   "weightValidation": "3.0"
+  }
+ },
+ "hostLoad": {
+  "loadavgEnd": [
+   1.92,
+   1.23,
+   0.89
+  ],
+  "loadavgStart": [
+   0.36,
+   0.68,
+   0.69
+  ],
+  "vmBusyPct": 57.0,
+  "vmStealPct": 0.0
+ },
+ "invalidReasons": [],
+ "rep": "2",
+ "scenario": "S1",
+ "settle": {
+  "cpuLast10": 7.84,
+  "cpuPrev10": 8.69,
+  "seconds": 74.2,
+  "stable": true,
+  "threshold": 8.0
+ },
+ "state": {
+  "post": {
+   "apps": {
+    "lu.uni.sdn.api_gateway": "ACTIVE",
+    "lu.uni.sdn.southbound_mac_extractor": "INSTALLED",
+    "org.onosproject.fwd": "INSTALLED",
+    "org.onosproject.proxyarp": "INSTALLED"
+   },
+   "containerStartedAt": "2026-11-23T16:47:43.927819343Z",
+   "gateway": {
+    "oarMd5": "b2020a3e90469a6ab849159137767a9c",
+    "state": "ACTIVE",
+    "version": "1.0.SNAPSHOT"
+   }
+  },
+  "pre": {
+   "apps": {
+    "lu.uni.sdn.api_gateway": "ACTIVE",
+    "lu.uni.sdn.southbound_mac_extractor": "INSTALLED",
+    "org.onosproject.fwd": "INSTALLED",
+    "org.onosproject.proxyarp": "INSTALLED"
+   },
+   "containerStartedAt": "2026-11-23T16:47:43.927819343Z",
+   "gateway": {
+    "oarMd5": "b2020a3e90469a6ab849159137767a9c",
+    "state": "ACTIVE",
+    "version": "1.0.SNAPSHOT"
+   }
+  }
+ },
+ "t0": 1795452621.611,
+ "target": "v1",
+ "timestamps": {
+  "ts_L_end": 1795452742.145,
+  "ts_L_start": 1795452591.489,
+  "ts_S1_end": 1795452711.903,
+  "ts_S1_start": 1795452651.632,
+  "ts_collectors_stop": 1795452743.711,
+  "ts_configured": 1795452513.961,
+  "ts_lock": 1795452453.074,
+  "ts_run_end": 1795452742.15,
+  "ts_settled": 1795452588.238
+ },
+ "valid": true,
+ "warnings": []
+}

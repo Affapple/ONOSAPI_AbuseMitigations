@@ -1,0 +1,277 @@
+=== 2026-11-23T07:49:26-08:00 C1 baseline 1
+== C1/baseline/1 2026-11-23T07:49:27-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/baseline/1/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 5.62, "cpuPrev10": 6.19}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T07:53:28-08:00 C2 baseline 1
+== C2/baseline/1 2026-11-23T07:53:28-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/baseline/1/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 27.1, "threshold": 8.0, "cpuLast10": 7.16, "cpuPrev10": 6.66}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T07:57:28-08:00 C3 baseline 1
+== C3/baseline/1 2026-11-23T07:57:28-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/baseline/1/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 7.57, "cpuPrev10": 6.75}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:01:19-08:00 C1 S1 1
+run.sh: skip C1/S1/1 (done)
+=== 2026-11-23T08:01:19-08:00 C2 S1 1
+== C2/S1/1 2026-11-23T08:01:19-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S1/1/L.csv
+S1: python3 /home/mininet/project/scenarios/s1_flood.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S1/1/S1.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 5.1, "cpuPrev10": 5.68}
+S1 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:05:11-08:00 C3 S1 1
+== C3/S1/1 2026-11-23T08:05:11-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S1/1/L.csv
+S1: python3 /home/mininet/project/scenarios/s1_flood.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S1/1/S1.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 27.0, "threshold": 8.0, "cpuLast10": 3.36, "cpuPrev10": 4.2}
+S1 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:09:11-08:00 C1 S2 1
+run.sh: skip C1/S2/1 (done)
+=== 2026-11-23T08:09:11-08:00 C2 S2 1
+== C2/S2/1 2026-11-23T08:09:11-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S2/1/L.csv
+S2: python3 /home/mininet/project/scenarios/s2_churn.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S2/1/S2.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 23.0, "threshold": 8.0, "cpuLast10": 3.45, "cpuPrev10": 3.73}
+S2 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:13:06-08:00 C3 S2 1
+== C3/S2/1 2026-11-23T08:13:06-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S2/1/L.csv
+S2: python3 /home/mininet/project/scenarios/s2_churn.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S2/1/S2.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 5.23, "cpuPrev10": 6.52}
+S2 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:17:01-08:00 C1 S3 1
+== C1/S3/1 2026-11-23T08:17:02-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S3/1/L.csv
+S3: python3 /home/mininet/project/scenarios/s3_semantic.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S3/1/S3.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 7.47, "cpuPrev10": 7.36}
+S3 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:20:58-08:00 C2 S3 1
+run.sh: skip C2/S3/1 (done)
+=== 2026-11-23T08:20:58-08:00 C3 S3 1
+== C3/S3/1 2026-11-23T08:20:59-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S3/1/L.csv
+S3: python3 /home/mininet/project/scenarios/s3_semantic.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S3/1/S3.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 41.1, "threshold": 8.0, "cpuLast10": 7.89, "cpuPrev10": 8.81}
+S3 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:25:22-08:00 C1 S4 1
+== C1/S4/1 2026-11-23T08:25:22-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S4/1/L.csv
+S4: python3 /home/mininet/project/scenarios/s4_cross_tenant.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S4/1/S4.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 42.1, "threshold": 8.0, "cpuLast10": 7.45, "cpuPrev10": 9.23}
+S4 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:29:49-08:00 C2 S4 1
+run.sh: skip C2/S4/1 (done)
+=== 2026-11-23T08:29:49-08:00 C3 S4 1
+== C3/S4/1 2026-11-23T08:29:49-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S4/1/L.csv
+S4: python3 /home/mininet/project/scenarios/s4_cross_tenant.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S4/1/S4.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 42.1, "threshold": 8.0, "cpuLast10": 6.37, "cpuPrev10": 7.92}
+S4 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:34:15-08:00 C1 baseline 2
+== C1/baseline/2 2026-11-23T08:34:15-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/baseline/2/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 67.2, "threshold": 8.0, "cpuLast10": 7.46, "cpuPrev10": 9.03}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:39:10-08:00 C2 baseline 2
+== C2/baseline/2 2026-11-23T08:39:10-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/baseline/2/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 27.1, "threshold": 8.0, "cpuLast10": 7.36, "cpuPrev10": 8.72}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:43:23-08:00 C3 baseline 2
+== C3/baseline/2 2026-11-23T08:43:23-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/baseline/2/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 24.0, "threshold": 8.0, "cpuLast10": 7.07, "cpuPrev10": 8.69}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:47:32-08:00 C1 S1 2
+== C1/S1/2 2026-11-23T08:47:33-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S1/2/L.csv
+S1: python3 /home/mininet/project/scenarios/s1_flood.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S1/2/S1.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 74.2, "threshold": 8.0, "cpuLast10": 7.84, "cpuPrev10": 8.69}
+S1 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:52:31-08:00 C2 S1 2
+== C2/S1/2 2026-11-23T08:52:31-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S1/2/L.csv
+S1: python3 /home/mininet/project/scenarios/s1_flood.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S1/2/S1.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 22.0, "threshold": 8.0, "cpuLast10": 7.72, "cpuPrev10": 9.06}
+S1 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T08:56:38-08:00 C3 S1 2
+== C3/S1/2 2026-11-23T08:56:38-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S1/2/L.csv
+S1: python3 /home/mininet/project/scenarios/s1_flood.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S1/2/S1.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 36.1, "threshold": 8.0, "cpuLast10": 7.47, "cpuPrev10": 8.69}
+S1 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:01:01-08:00 C1 S2 2
+== C1/S2/2 2026-11-23T09:01:01-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S2/2/L.csv
+S2: python3 /home/mininet/project/scenarios/s2_churn.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S2/2/S2.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 21.0, "threshold": 8.0, "cpuLast10": 6.87, "cpuPrev10": 8.51}
+S2 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:05:08-08:00 C2 S2 2
+== C2/S2/2 2026-11-23T09:05:08-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S2/2/L.csv
+S2: python3 /home/mininet/project/scenarios/s2_churn.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S2/2/S2.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 7.8, "cpuPrev10": 9.13}
+run.sh: INVALID: S2 overran, killed
+S2 exit 124
+L exit 0
+INVALID: S2 overran, killed; S2 exited 124
+== restore default VM state
+=== 2026-11-23T09:09:18-08:00 C3 S2 2
+== C3/S2/2 2026-11-23T09:09:18-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S2/2/L.csv
+S2: python3 /home/mininet/project/scenarios/s2_churn.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S2/2/S2.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 22.0, "threshold": 8.0, "cpuLast10": 7.07, "cpuPrev10": 7.88}
+S2 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:13:26-08:00 C1 S3 2
+== C1/S3/2 2026-11-23T09:13:27-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S3/2/L.csv
+S3: python3 /home/mininet/project/scenarios/s3_semantic.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S3/2/S3.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 23.0, "threshold": 8.0, "cpuLast10": 7.85, "cpuPrev10": 9.21}
+S3 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:17:38-08:00 C2 S3 2
+== C2/S3/2 2026-11-23T09:17:38-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S3/2/L.csv
+S3: python3 /home/mininet/project/scenarios/s3_semantic.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S3/2/S3.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 21.0, "threshold": 8.0, "cpuLast10": 6.76, "cpuPrev10": 7.41}
+S3 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:21:47-08:00 C3 S3 2
+== C3/S3/2 2026-11-23T09:21:48-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S3/2/L.csv
+S3: python3 /home/mininet/project/scenarios/s3_semantic.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S3/2/S3.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 26.0, "threshold": 8.0, "cpuLast10": 7.27, "cpuPrev10": 9.05}
+S3 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:26:31-08:00 C1 S4 2
+== C1/S4/2 2026-11-23T09:26:31-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/S4/2/L.csv
+S4: python3 /home/mininet/project/scenarios/s4_cross_tenant.py --target v1 --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C1/S4/2/S4.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 6.36, "cpuPrev10": 5.89}
+S4 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:30:23-08:00 C2 S4 2
+== C2/S4/2 2026-11-23T09:30:24-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S4/2/L.csv
+S4: python3 /home/mininet/project/scenarios/s4_cross_tenant.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S4/2/S4.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 27.0, "threshold": 8.0, "cpuLast10": 5.74, "cpuPrev10": 5.01}
+S4 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:34:21-08:00 C3 S4 2
+== C3/S4/2 2026-11-23T09:34:21-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S4/2/L.csv
+S4: python3 /home/mininet/project/scenarios/s4_cross_tenant.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S4/2/S4.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 21.0, "threshold": 8.0, "cpuLast10": 7.0, "cpuPrev10": 8.53}
+S4 exit 0
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:38:18-08:00 C1 baseline 3
+== C1/baseline/3 2026-11-23T09:38:18-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/baseline/3/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 7.92, "cpuPrev10": 7.24}
+L exit 0
+valid
+== restore default VM state
+=== 2026-11-23T09:42:11-08:00 C2 baseline 3
+== C2/baseline/3 2026-11-23T09:42:11-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/baseline/3/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock

@@ -1,0 +1,8 @@
+== C1/baseline/3 2026-11-23T09:38:18-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target v1 --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C1/baseline/3/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 7.92, "cpuPrev10": 7.24}
+L exit 0
+valid
+== restore default VM state

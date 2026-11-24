@@ -1,0 +1,23 @@
+== C2/S3/1 2026-11-23T07:25:28-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S3/1/L.csv
+S3: python3 /home/mininet/project/scenarios/s3_semantic.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S3/1/S3.csv
+waiting for /tmp/sdn-onos.lock
+RESULT: MATCH after 1 tries
+== 5. account probe (GET /onos/v1/flows)
+t1-op/guest -> 403 401 (expected 403 401) after 0s
+== 6. app state
+org.onosproject.fwd INSTALLED
+org.onosproject.proxyarp INSTALLED
+org.onosproject.hostprovider ACTIVE
+lu.uni.sdn.southbound_mac_extractor INSTALLED
+lu.uni.sdn.api_gateway ACTIVE
+== gateway ready
+== purge
+onosctl: purge done in 0.1s; 9 core flows left
+== gateway config
+onosctl: POST config -> 500 {'code': 500, 'message': 'An application error occurred'}
+config.sh: ABORT: gateway config
+run.sh: INVALID: config.sh failed
+INVALID: config.sh failed; docker.csv: None rows (< 110); flows.csv: None rows (< 12); heap.csv: None rows (< 110); L.csv: None data rows; S3.csv: None data rows; ONOS CPU did not settle before t0: None
+== restore default VM state
+run.sh: RESTORE FAILED (restore.log)

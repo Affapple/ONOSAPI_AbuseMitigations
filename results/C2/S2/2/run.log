@@ -1,0 +1,10 @@
+== C2/S2/2 2026-11-23T09:05:08-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S2/2/L.csv
+S2: python3 /home/mininet/project/scenarios/s2_churn.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S2/2/S2.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 20.0, "threshold": 8.0, "cpuLast10": 7.8, "cpuPrev10": 9.13}
+run.sh: INVALID: S2 overran, killed
+S2 exit 124
+L exit 0
+INVALID: S2 overran, killed; S2 exited 124
+== restore default VM state

@@ -1,0 +1,66 @@
+tenant overlay in effect (t1-op GET /onos/v1/flows -> 403)
+== config C3 (overlay tenant --no-restart) 2026-11-23T07:26:50-08:00
+== 0. save current users.properties
+saved to /tmp/users.properties.prev.WYJpEX (md5 0e4f83128e448db9376be09ad2a72574)
+== 1. copy /home/mininet/project/karaf/users.tenant.properties
+users.properties md5 0e4f83128e448db9376be09ad2a72574
+== 2-4. skipped (--no-restart)
+== 5. account probe (GET /onos/v1/flows)
+t1-op/guest -> 403 401 (expected 403 401) after 0s
+== 6. app state
+org.onosproject.fwd INSTALLED
+org.onosproject.proxyarp INSTALLED
+org.onosproject.hostprovider ACTIVE
+lu.uni.sdn.southbound_mac_extractor INSTALLED
+lu.uni.sdn.api_gateway ACTIVE
+== gateway ready
+== purge
+onosctl: purge done in 0.1s; 9 core flows left
+== gateway config
+onosctl: POST config -> 500 {'code': 500, 'message': 'An application error occurred'}
+config.sh: ABORT: gateway config
+restore attempt 1 failed
+tenant overlay in effect (t1-op GET /onos/v1/flows -> 403)
+== config C3 (overlay tenant --no-restart) 2026-11-23T07:27:02-08:00
+== 0. save current users.properties
+saved to /tmp/users.properties.prev.DMT9jM (md5 0e4f83128e448db9376be09ad2a72574)
+== 1. copy /home/mininet/project/karaf/users.tenant.properties
+users.properties md5 0e4f83128e448db9376be09ad2a72574
+== 2-4. skipped (--no-restart)
+== 5. account probe (GET /onos/v1/flows)
+t1-op/guest -> 403 401 (expected 403 401) after 0s
+== 6. app state
+org.onosproject.fwd INSTALLED
+org.onosproject.proxyarp INSTALLED
+org.onosproject.hostprovider ACTIVE
+lu.uni.sdn.southbound_mac_extractor INSTALLED
+lu.uni.sdn.api_gateway ACTIVE
+== gateway ready
+== purge
+onosctl: purge done in 0.1s; 9 core flows left
+== gateway config
+onosctl: POST config -> 500 {'code': 500, 'message': 'An application error occurred'}
+config.sh: ABORT: gateway config
+restore attempt 2 failed
+tenant overlay in effect (t1-op GET /onos/v1/flows -> 403)
+== config C3 (overlay tenant --no-restart) 2026-11-23T07:27:13-08:00
+== 0. save current users.properties
+saved to /tmp/users.properties.prev.qTMLLm (md5 0e4f83128e448db9376be09ad2a72574)
+== 1. copy /home/mininet/project/karaf/users.tenant.properties
+users.properties md5 0e4f83128e448db9376be09ad2a72574
+== 2-4. skipped (--no-restart)
+== 5. account probe (GET /onos/v1/flows)
+t1-op/guest -> 403 401 (expected 403 401) after 0s
+== 6. app state
+org.onosproject.fwd INSTALLED
+org.onosproject.proxyarp INSTALLED
+org.onosproject.hostprovider ACTIVE
+lu.uni.sdn.southbound_mac_extractor INSTALLED
+lu.uni.sdn.api_gateway ACTIVE
+== gateway ready
+== purge
+onosctl: purge done in 0.1s; 9 core flows left
+== gateway config
+onosctl: POST config -> 500 {'code': 500, 'message': 'An application error occurred'}
+config.sh: ABORT: gateway config
+restore attempt 3 failed

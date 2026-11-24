@@ -1,4 +1,0 @@
-config,workload,csv,window,pings,loss_pct,rtt_p50_ms,rtt_p95_ms
-C3,S0,L-ping,pre,59,0.0,0.099,0.148
-C3,S0,L-ping,attack,117,0.0,0.113,0.174
-C3,S0,L-ping,post,59,0.0,0.107,0.162

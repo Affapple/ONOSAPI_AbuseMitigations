@@ -1,0 +1,161 @@
+{
+ "tenants": {
+  "t1": {
+   "appId": "lu.uni.sdn.gw.t1",
+   "conflicts": {
+    "dst_capture": 5,
+    "foreign_rewrite": 2,
+    "spoofed_source": 1
+   },
+   "lastConflict": "dst_capture: ETH_DST 00:00:00:00:02:02 belongs to tenant t2",
+   "quotaEnabled": true,
+   "quotas": {
+    "churnLimit": 200,
+    "churnWindowSeconds": 60,
+    "maxFlowsPerTenant": 100,
+    "maxFlowsPerTenantPerDevice": 40,
+    "maxIntentsPerTenant": 20
+   },
+   "throttle": {
+    "adaptiveEnabled": true,
+    "cooldownEntries": 1,
+    "cooldownRemaining": 0,
+    "fixedEffect": "rate",
+    "fixedRemaining": 0,
+    "history": [
+     {
+      "levelAfter": 0,
+      "reason": "match_not_owned",
+      "scoreAfter": 3.0,
+      "secondsAgo": 92.0,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 0,
+      "reason": "dst_capture",
+      "scoreAfter": 7.91,
+      "secondsAgo": 89.5,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "spoofed_source",
+      "scoreAfter": 12.69,
+      "secondsAgo": 87.1,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "foreign_rewrite",
+      "scoreAfter": 17.33,
+      "secondsAgo": 84.5,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "dst_capture",
+      "scoreAfter": 21.84,
+      "secondsAgo": 82.1,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 1,
+      "reason": "endpoint_not_owned",
+      "scoreAfter": 24.22,
+      "secondsAgo": 79.6,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "dst_capture",
+      "scoreAfter": 28.53,
+      "secondsAgo": 77.1,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "foreign_rewrite",
+      "scoreAfter": 24.6,
+      "secondsAgo": 44.6,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "dst_capture",
+      "scoreAfter": 28.9,
+      "secondsAgo": 42.1,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "endpoint_not_owned",
+      "scoreAfter": 31.08,
+      "secondsAgo": 39.6,
+      "weight": 3.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "dst_capture",
+      "scoreAfter": 35.19,
+      "secondsAgo": 37.1,
+      "weight": 5.0
+     },
+     {
+      "levelAfter": 2,
+      "reason": "selector_not_owned",
+      "scoreAfter": 37.19,
+      "secondsAgo": 34.6,
+      "weight": 3.0
+     }
+    ],
+    "level": 2,
+    "mode": "adaptive",
+    "rateFactor": 0.5,
+    "score": 24.95
+   },
+   "usage": {
+    "churn": 0,
+    "directFlows": 0,
+    "estimatedIntentFlows": 0,
+    "flows": 0,
+    "intentFlows": 0,
+    "intents": 0,
+    "perDevice": {}
+   }
+  },
+  "t2": {
+   "appId": "lu.uni.sdn.gw.t2",
+   "conflicts": {},
+   "lastConflict": null,
+   "quotaEnabled": true,
+   "quotas": {
+    "churnLimit": 200,
+    "churnWindowSeconds": 60,
+    "maxFlowsPerTenant": 100,
+    "maxFlowsPerTenantPerDevice": 40,
+    "maxIntentsPerTenant": 20
+   },
+   "throttle": {
+    "adaptiveEnabled": true,
+    "cooldownEntries": 0,
+    "cooldownRemaining": 0,
+    "fixedEffect": "rate",
+    "fixedRemaining": 0,
+    "history": [],
+    "level": 0,
+    "mode": "adaptive",
+    "rateFactor": 1.0,
+    "score": 0.0
+   },
+   "usage": {
+    "churn": 8,
+    "directFlows": 0,
+    "estimatedIntentFlows": 0,
+    "flows": 0,
+    "intentFlows": 0,
+    "intents": 0,
+    "perDevice": {}
+   }
+  }
+ }
+}

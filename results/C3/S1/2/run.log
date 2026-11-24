@@ -1,0 +1,9 @@
+== C3/S1/2 2026-11-23T08:56:38-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C3/S1/2/L.csv
+S1: python3 /home/mininet/project/scenarios/s1_flood.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C3/S1/2/S1.csv
+waiting for /tmp/sdn-onos.lock
+settle: {"stable": true, "seconds": 36.1, "threshold": 8.0, "cpuLast10": 7.47, "cpuPrev10": 8.69}
+S1 exit 0
+L exit 0
+valid
+== restore default VM state

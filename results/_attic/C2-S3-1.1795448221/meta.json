@@ -1,0 +1,58 @@
+{
+ "attackWindow": [
+  null,
+  null
+ ],
+ "build": {
+  "deployedAt": "2026-11-23T16:20:10+01:00",
+  "gitCommit": "c771966fb29197192cda5c67ea2e0bc6ee9095f9",
+  "gitDirty": true,
+  "laptopOarMd5": "b2020a3e90469a6ab849159137767a9c"
+ },
+ "commands": {
+  "L": "python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S3/1/L.csv",
+  "S3": "python3 /home/mininet/project/scenarios/s3_semantic.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S3/1/S3.csv"
+ },
+ "config": "C2",
+ "duration": 120.0,
+ "exitCodes": {},
+ "gatewayConfig": null,
+ "hostLoad": null,
+ "invalidReasons": [
+  "config.sh failed",
+  "docker.csv: None rows (< 110)",
+  "flows.csv: None rows (< 12)",
+  "heap.csv: None rows (< 110)",
+  "L.csv: None data rows",
+  "S3.csv: None data rows",
+  "ONOS CPU did not settle before t0: None"
+ ],
+ "rep": "1",
+ "scenario": "S3",
+ "settle": null,
+ "state": {
+  "post": {
+   "apps": {
+    "lu.uni.sdn.api_gateway": "ACTIVE",
+    "lu.uni.sdn.southbound_mac_extractor": "INSTALLED",
+    "org.onosproject.fwd": "INSTALLED",
+    "org.onosproject.proxyarp": "INSTALLED"
+   },
+   "containerStartedAt": "2026-11-23T15:25:40.689436387Z",
+   "gateway": {
+    "oarMd5": "b2020a3e90469a6ab849159137767a9c",
+    "state": "ACTIVE",
+    "version": "1.0.SNAPSHOT"
+   }
+  },
+  "pre": null
+ },
+ "t0": null,
+ "target": "gw",
+ "timestamps": {
+  "ts_collectors_stop": 1795447609.583,
+  "ts_lock": 1795447528.298
+ },
+ "valid": false,
+ "warnings": []
+}

@@ -1,0 +1,10 @@
+config=C2
+scenario=S3
+rep=1
+target=gw
+duration=120
+cmd_L=python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/S3/1/L.csv
+cmd_S3=python3 /home/mininet/project/scenarios/s3_semantic.py --target gw --user t1-op --password t1-op-pw --duration 60 --out /home/mininet/project/results/C2/S3/1/S3.csv
+ts_lock=1795447528.298
+ts_collectors_stop=1795447609.583
+invalid=;config.sh failed

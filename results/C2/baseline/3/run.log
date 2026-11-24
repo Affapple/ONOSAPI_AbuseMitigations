@@ -1,0 +1,4 @@
+== C2/baseline/3 2026-11-23T09:42:11-08:00
+L: python3 /home/mininet/project/scenarios/l_legit.py --target gw --user t2-op --password t2-op-pw --duration 150 --out /home/mininet/project/results/C2/baseline/3/L.csv
+baseline: none
+waiting for /tmp/sdn-onos.lock
